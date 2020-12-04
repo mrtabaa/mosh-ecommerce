@@ -1,0 +1,27 @@
+<mat-toolbar color="primary">
+    <mat-icon>eco</mat-icon> <a style="color: white" [routerLink]="['/']"
+        routerLinkActive="router-link-active">e-Commerce Shop</a>
+
+    <span class="spacer"></span>
+
+    <div>
+        <a mat-button [routerLink]="['/shopping-cart']" routerLinkActive="router-link-active">Shopping Cart</a>
+    </div>
+
+    <button [matMenuTriggerFor]="appMenu" mat-raised-button color="accent"
+        *ngIf="displayName$ | async as displayName; else login">{{displayName}}
+    </button>
+    <ng-template #login>
+        <button mat-button [routerLink]="['/login']" routerLinkActive="router-link-active">Login</button>
+    </ng-template>
+    <mat-menu #appMenu>
+        <button mat-menu-item [routerLink]="['/orders']" routerLinkActive="router-link-active">Orders</button>
+        <ng-container *ngIf="isAdmin$ | async">
+            <button mat-menu-item [routerLink]="['/admin/manage-orders']" routerLinkActive="router-link-active">Manage
+                Orders</button>
+            <button mat-menu-item [routerLink]="['/admin/manage-products']" routerLinkActive="router-link-active">Manage
+                Products</button>
+        </ng-container>
+        <button mat-menu-item (click)="logout()">Logout</button>
+    </mat-menu>
+</mat-toolbar>

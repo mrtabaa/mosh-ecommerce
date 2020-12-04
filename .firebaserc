@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "angular-24027": {
+      "hosting": {
+        "mosh-ecommerce": [
+          "angular-24027"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "mosh-ecommerce": "angular-24027"
+  }
+}

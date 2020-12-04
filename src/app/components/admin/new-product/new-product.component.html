@@ -1,0 +1,19 @@
+<button mat-raised-button color="primary" [routerLink]="['/admin/new-product']">New Product</button>
+
+<form class="form-container" #f="ngForm" (ngSubmit)="onSubmit(f)">
+    <mat-form-field>
+        <input matInput placeholder="Title" ngModel #title="ngModel" required minlength="3">
+    </mat-form-field>
+    <mat-form-field>
+        <input matInput placeholder="Price" required>
+        <span matPrefix>$&nbsp;</span>
+    </mat-form-field>
+    <mat-form-field>
+        <mat-select placeholder="Category" [(value)]="selectedValue" required>
+            <mat-option *ngFor="let item of categories" [value]="item">{{item}}</mat-option>
+        </mat-select>
+    </mat-form-field>
+    <mat-form-field>
+        <input matInput placeholder="Image Url" required>
+    </mat-form-field>
+</form>

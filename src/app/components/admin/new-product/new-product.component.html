@@ -1,6 +1,4 @@
-<button mat-raised-button color="primary" [routerLink]="['/admin/new-product']">New Product</button>
-
-<form class="form-container" #f="ngForm" (ngSubmit)="onSubmit(f)">
+<form class="container" #f="ngForm" (ngSubmit)="onSubmit(f)" fxLayout="column">
     <mat-form-field>
         <input matInput placeholder="Title" ngModel #title="ngModel" required minlength="3">
     </mat-form-field>
@@ -16,4 +14,6 @@
     <mat-form-field>
         <input matInput placeholder="Image Url" required>
     </mat-form-field>
+
+    <button class="saveBtn" mat-raised-button color="primary">Save</button>
 </form>

@@ -3,7 +3,7 @@ import { Component, OnInit } from '@angular/core';
 @Component({
   selector: 'app-new-product',
   templateUrl: './new-product.component.html',
-  styleUrls: ['./new-product.component.css']
+  styleUrls: ['./new-product.component.scss']
 })
 export class NewProductComponent implements OnInit {
   hide = true;

@@ -20,7 +20,7 @@ export class ProductService {
       case 'Cosmetic':
         return ['Lipstick', 'Lution'];
       default:
-        return ['Select a Type First'];
+        return null;
     }
   }
 

@@ -2,16 +2,6 @@
     <!-- 1st row -->
     <div fxLayout="row wrap" fxLayoutAlign="space-around center">
         <mat-form-field fxFlex="40" fxFlex.lt-sm="80">
-            <input matInput placeholder="Title" ngModel name="title" required minlength="3">
-        </mat-form-field>
-        <mat-form-field fxFlex="40" fxFlex.lt-sm="80">
-            <input matInput placeholder="Price" required ngModel name="price">
-            <span matPrefix>$&nbsp;</span>
-        </mat-form-field>
-    </div>
-    <!-- 2nd row -->
-    <div fxLayout="row wrap" fxLayoutAlign="space-around center">
-        <mat-form-field fxFlex="40" fxFlex.lt-sm="80">
             <mat-select placeholder="Type" required ngModel name="type" #selectedType>
                 <mat-option *ngFor="let type of types" [value]="type">{{type}}
                 </mat-option>
@@ -23,6 +13,16 @@
                     {{category}}
                 </mat-option>
             </mat-select>
+        </mat-form-field>
+    </div>
+    <!-- 2nd row -->
+    <div fxLayout="row wrap" fxLayoutAlign="space-around center">
+        <mat-form-field fxFlex="40" fxFlex.lt-sm="80">
+            <input matInput placeholder="Title" ngModel name="title" required minlength="3">
+        </mat-form-field>
+        <mat-form-field fxFlex="40" fxFlex.lt-sm="80">
+            <input matInput placeholder="Price" required ngModel name="price">
+            <span matPrefix>$&nbsp;</span>
         </mat-form-field>
         <!-- 3rd row -->
         <mat-form-field fxFlex="80">

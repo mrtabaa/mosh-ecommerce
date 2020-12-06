@@ -1,22 +1,37 @@
-<mat-toolbar color="primary">
-    <mat-icon>eco</mat-icon> <a style="color: white" [routerLink]="['/']"
-        routerLinkActive="router-link-active">e-Commerce Shop</a>
+<mat-toolbar color="primary" fxLayout="row" fxLayoutAlign="space-between center">
+    <!-- left -->
+    <div fxFlex="" class="brand">
+        <a [routerLink]="['/']">
+            <mat-icon>eco</mat-icon>
+        </a>
+        <a fxShow fxHide.lt-sm [routerLink]="['/']" routerLinkActive="router-link-active">e-Commerce
+            Shop</a>
+    </div>
 
-    <span class="spacer"></span>
-
-    <div>
-        <a mat-button [routerLink]="['/shopping-cart']" routerLinkActive="router-link-active">Shopping Cart</a>
+    <!-- right -->
+    <div class="gt-tablet-btns">
+        <button mat-button [routerLink]="['/shopping-cart']" routerLinkActive="router-link-active">
+            <mat-icon>shopping_cart</mat-icon>
+        </button>
+        <button fxShow fxHide.lt-sm mat-button [routerLink]="['/orders']"
+            routerLinkActive="router-link-active">Orders</button>
     </div>
 
     <button [matMenuTriggerFor]="appMenu" mat-raised-button color="accent"
-        *ngIf="displayName$ | async as displayName; else login">{{displayName}}
+        *ngIf="displayName$ | async as displayName; else login">
+        <span class="displayName">{{displayName}}</span>
+        <mat-icon>more_vert</mat-icon>
     </button>
+
+    <!-- not logged-in -->
     <ng-template #login>
         <button mat-button [routerLink]="['/login']" routerLinkActive="router-link-active">Login</button>
     </ng-template>
+    <!-- logged-in -->
     <mat-menu #appMenu>
-        <button mat-menu-item [routerLink]="['/orders']" routerLinkActive="router-link-active">Orders</button>
         <ng-container *ngIf="isAdmin$ | async">
+            <button fxHide fxShow.lt-sm mat-menu-item [routerLink]="['/orders']"
+                routerLinkActive="router-link-active">Orders</button>
             <button mat-menu-item [routerLink]="['/admin/manage-orders']" routerLinkActive="router-link-active">Manage
                 Orders</button>
             <button mat-menu-item [routerLink]="['/admin/manage-products']" routerLinkActive="router-link-active">Manage

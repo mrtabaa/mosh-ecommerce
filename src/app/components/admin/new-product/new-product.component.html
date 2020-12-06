@@ -1,19 +1,26 @@
-<form class="container" #f="ngForm" (ngSubmit)="onSubmit(f)" fxLayout="column">
-    <mat-form-field>
-        <input matInput placeholder="Title" ngModel #title="ngModel" required minlength="3">
-    </mat-form-field>
-    <mat-form-field>
-        <input matInput placeholder="Price" required>
-        <span matPrefix>$&nbsp;</span>
-    </mat-form-field>
-    <mat-form-field>
-        <mat-select placeholder="Category" [(value)]="selectedValue" required>
-            <mat-option *ngFor="let item of categories" [value]="item">{{item}}</mat-option>
-        </mat-select>
-    </mat-form-field>
-    <mat-form-field>
-        <input matInput placeholder="Image Url" required>
-    </mat-form-field>
-
-    <button class="saveBtn" mat-raised-button color="primary">Save</button>
+<form #f="ngForm" (ngSubmit)="onSubmit(f.value)" fxLayout="column">
+    <!-- 1st row -->
+    <div fxLayout="row wrap" fxLayoutAlign="space-around center">
+        <mat-form-field fxFlex="40" fxFlex.lt-sm="80">
+            <input matInput placeholder="Title" ngModel name="title" required minlength="3">
+        </mat-form-field>
+        <mat-form-field fxFlex="40" fxFlex.lt-sm="80">
+            <input matInput placeholder="Price" required>
+            <span matPrefix>$&nbsp;</span>
+        </mat-form-field>
+    </div>
+    <!-- 2nd row -->
+    <div fxLayout="row wrap" fxLayoutAlign="space-around center">
+        <mat-form-field fxFlex="40" fxFlex.lt-sm="80">
+            <mat-select placeholder="Category" [(value)]="selectedValue" required>
+                <mat-option *ngFor="let item of categories" [value]="item">{{item}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field fxFlex="40" fxFlex.lt-sm="80">
+            <input matInput placeholder="Image Url" required>
+        </mat-form-field>
+    </div>
+    <!-- 3rd row -->
+      <p>{{ f.value | json }}</p>
+    <button fxFlexAlign="center" mat-raised-button color="primary">Save</button>
 </form>

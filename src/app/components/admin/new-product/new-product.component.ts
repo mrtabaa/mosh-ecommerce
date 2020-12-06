@@ -7,18 +7,20 @@ import { ProductService } from 'src/app/services/product.service';
   styleUrls: ['./new-product.component.scss']
 })
 export class NewProductComponent implements OnInit {
-  hide = true;
-  categories = ['Bread', 'Bevrage', 'Milk'];
-  selectedValue: string;
+  constructor(private productService: ProductService) {
+  }
 
-  constructor(private productService: ProductService) { }
+  types: string[] = this.productService.types;
+
+  getCategories(selectedType: string): string[] {
+    return this.productService.getCategory(selectedType);
+  }
 
   ngOnInit(): void {
   }
 
   onSubmit($event: Event): void {
-    // this.productService($event.)
+    console.log($event);
+    // this.productService.createProduct()
   }
 }
-
-

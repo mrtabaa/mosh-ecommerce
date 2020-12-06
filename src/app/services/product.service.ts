@@ -9,15 +9,29 @@ export class ProductService {
 
   constructor(private db: AngularFireDatabase) { }
 
-  createProduct(product: Product): void {
-    this.db.object<Product>('/products/')
-      .set(
-        {
-          title: product.title,
-          price: product.price,
-          category: product.category,
-          imageUrl: product.imageUrl
+  types = ['Food', 'Electronic', 'Cosmetic'];
+
+  getCategory(selectedType: string): string[] {
+    switch (selectedType) {
+      case 'Food':
+        return ['Bread', 'Bevrage', 'Milk'];
+      case 'Electronic':
+        return ['Phone', 'Labtop', 'TV'];
+      case 'Cosmetic':
+        return ['Lipstick', 'Lution'];
+      default:
+        return ['Select a Type First'];
+    }
+  }
+
+  createProduct(product: Product, type: string, category: string): void {
+    this.db.list<Product>('/products/' + type + '/' + category)
+      .push({
+        title: {
+          imageUrl: product.title.imageUrl,
+          price: product.title.price,
         }
-      );
+      });
   }
 }
+

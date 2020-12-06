@@ -28,14 +28,12 @@ export class UserService {
 
   updateUser(user: firebase.default.User): void {
     this.db.object<User>('/users/' + user.uid)
-      .update(
-        {
-          uid: user.uid,
-          name: user.displayName,
-          email: user.email,
-          // isAdmin: false,
-          photoUrl: user.photoURL
-        }
-      );
+      .update({
+        uid: user.uid,
+        name: user.displayName,
+        email: user.email,
+        // isAdmin: false,
+        photoUrl: user.photoURL
+      });
   }
 }

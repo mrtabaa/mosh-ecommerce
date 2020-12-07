@@ -24,13 +24,12 @@ export class ProductService {
     }
   }
 
-  createProduct(product: Product, type: string, category: string): void {
-    this.db.list<Product>('/products/' + type + '/' + category)
+  createProduct(product: Product): void {
+    this.db.list<Product>('/products/' + product.type + '/' + product.category)
       .push({
-        title: {
-          imageUrl: product.title.imageUrl,
-          price: product.title.price,
-        }
+        imageUrl: product.imageUrl,
+        price: product.price,
+        title: product.title
       });
   }
 }

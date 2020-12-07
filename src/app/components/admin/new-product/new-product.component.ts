@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Product } from 'src/app/models/product.model';
 import { ProductService } from 'src/app/services/product.service';
 
 @Component({
@@ -10,6 +11,8 @@ export class NewProductComponent implements OnInit {
   constructor(private productService: ProductService) {
   }
 
+  isSubmitted = true;
+
   types: string[] = this.productService.types;
 
   getCategories(selectedType: string): string[] {
@@ -19,8 +22,9 @@ export class NewProductComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  onSubmit($event: Event): void {
+  onSubmit($event: Product): void {
     console.log($event);
-    // this.productService.createProduct()
+    this.productService.createProduct($event);
+    this.isSubmitted = !this.isSubmitted; // disable button if form submitted
   }
 }

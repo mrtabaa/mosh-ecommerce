@@ -1,4 +1,4 @@
-<form #f="ngForm" (ngSubmit)="onSubmit(f.value)" fxLayout="column">
+<form #f="ngForm" (ngSubmit)="onSubmit(f.value); f.reset();" fxLayout="column">
     <!-- 1st row -->
     <div fxLayout="row wrap" fxLayoutAlign="space-around center">
         <mat-form-field fxFlex="40" fxFlex.lt-sm="80">
@@ -26,10 +26,10 @@
         </mat-form-field>
         <!-- 3rd row -->
         <mat-form-field fxFlex="80">
-            <input matInput placeholder="Image Url" required ngModel name="url">
+            <input matInput placeholder="Image Url" required ngModel name="imageUrl">
         </mat-form-field>
     </div>
     <!-- 4rd row -->
       <p>{{ f.value | json }}</p>
-    <button fxFlexAlign="center" mat-raised-button color="primary" [disabled]="f.invalid">Save</button>
+    <button fxFlexAlign="center" mat-raised-button color="primary" [disabled]="f.invalid || isSubmitted">Save</button>
 </form>

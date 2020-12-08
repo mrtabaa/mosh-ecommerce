@@ -10,18 +10,14 @@ export class ProductService {
   constructor(private db: AngularFireDatabase) { }
 
   types = ['Food', 'Electronic', 'Cosmetic'];
+  categories = [
+    ['Bread', 'Bevrage', 'Milk'],
+    ['Phone', 'Labtop', 'TV'],
+    ['Lipstick', 'Lution']
+  ];
 
   getCategory(selectedType: string): string[] {
-    switch (selectedType) {
-      case 'Food':
-        return ['Bread', 'Bevrage', 'Milk'];
-      case 'Electronic':
-        return ['Phone', 'Labtop', 'TV'];
-      case 'Cosmetic':
-        return ['Lipstick', 'Lution'];
-      default:
-        return null;
-    }
+    return this.categories[this.types.indexOf(selectedType)];
   }
 
   createProduct(product: Product): void {

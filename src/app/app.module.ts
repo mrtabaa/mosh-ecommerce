@@ -11,6 +11,7 @@ import { environment } from 'src/environments/environment.prod';
 
 import { AuthService } from './services/auth.service';
 import { UserService } from './services/user.service';
+import { NewProductService } from './services/newProduct.service';
 
 @NgModule({
   declarations: [
@@ -29,7 +30,8 @@ import { UserService } from './services/user.service';
   ],
   providers: [
     AuthService,
-    UserService
+    UserService,
+    NewProductService
   ],
   bootstrap: [AppComponent]
 })

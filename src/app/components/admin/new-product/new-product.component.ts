@@ -1,5 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Observable } from 'rxjs';
 import { Product } from 'src/app/models/product.model';
+import { ProductTypeCategory } from 'src/app/models/ProductTypes';
 import { NewProductService } from 'src/app/services/newProduct.service';
 
 @Component({
@@ -8,29 +10,43 @@ import { NewProductService } from 'src/app/services/newProduct.service';
   styleUrls: ['./new-product.component.scss']
 })
 export class NewProductComponent implements OnInit {
+  tempType: string;
+  addedType: string;
+  addedCategory: string;
+  isAddedType: boolean;
+  isAddedCategory: boolean;
+
+  types$: Observable<ProductTypeCategory[]>;
+  categories$: Observable<ProductTypeCategory[]>;
+
   constructor(private newProductService: NewProductService) {
   }
 
-  types: string[] = this.newProductService.types;
-  selectedType: string;
-
-  getCategories(selectedType: string): string[] {
-    return this.newProductService.getCategory(selectedType);
+  addType(newTypeOnKeyup: HTMLInputElement): void {
+    this.newProductService.addType(newTypeOnKeyup.value);
+    this.addedType = newTypeOnKeyup.value;
+    newTypeOnKeyup.value = '';
+    this.isAddedType = true;
+    this.isAddedCategory = false;
   }
 
-  addType(newTypeEntered: string): void {
-    this.newProductService.addType(newTypeEntered);
+  getCategories(itemType: string): void {
+    this.categories$ = this.newProductService.getCategory(itemType);
   }
 
-  addCategory(newCategory: string, selectedType: string): void {
-    this.newProductService.addCategory(newCategory, selectedType);
+  addCategory(newCategoryOnKeyup: HTMLInputElement, selectedType: string): void {
+    this.newProductService.addCategory(newCategoryOnKeyup.value, selectedType);
+    this.addedCategory = newCategoryOnKeyup.value;
+    newCategoryOnKeyup.value = '';
+    this.isAddedType = false;
+    this.isAddedCategory = true;
   }
 
   ngOnInit(): void {
+    this.types$ = this.newProductService.getTypes();
   }
 
   onSubmit($event: Product): void {
-    console.log($event);
     this.newProductService.createProduct($event);
   }
 }

@@ -1,12 +1,17 @@
 <form #f="ngForm" (ngSubmit)="onSubmit(f.value); f.reset();" fxLayout="column">
     <!-- 1st row -->
+    <ng-container *ngIf="isAddedType || isAddedCategory">
+        <p *ngIf="isAddedType" class="newItemAdded" fxFlex="40" fxFlex.lt-sm="80" fxLayoutAlign="center center">
+            {{addedType}} added to the Type list.
+        </p>
+        <p *ngIf="isAddedCategory" class="newItemAdded" fxFlex="40" fxFlex.lt-sm="80" fxLayoutAlign="center center">
+            {{addedCategory}} added to the {{selectedType.value}}'s category.
+        </p>
+    </ng-container>
     <!-- TYPE -->
     <div fxLayout="row wrap" fxLayoutAlign="space-around center">
         <mat-form-field fxFlex="40" fxFlex.lt-sm="80">
-            <mat-select placeholder="Type" required ngModel name="type" #selectedType>
-                <mat-option *ngFor="let type of types" [value]="type">
-                    {{type}}
-                </mat-option>
+            <mat-select placeholder="Type" required ngModel name="type" #selectedType [(value)]="tempType">
                 <!-- newType option -->
                 <mat-option value="newType">
                     <mat-icon>add_circle_outline</mat-icon>
@@ -17,12 +22,17 @@
                     <mat-icon>add_circle_outline</mat-icon>
                     Fill out New Type field.
                 </mat-select-trigger>
+                <!-- types -->
+                <mat-option *ngFor="let item of types$ | async" [value]="item.key" (click)="getCategories(item.key)">
+                    {{item.key}}
+                </mat-option>
             </mat-select>
         </mat-form-field>
         <!-- newType input -->
         <mat-form-field *ngIf="selectedType.value === 'newType'" fxFlex="40" fxFlex.lt-sm="80" fxLayout="column">
-            <input fxFlex matInput placeholder="New Type" required #newTypeOnKeyup (keyup)="newTypeOnKeyup.value" />
-            <button mat-mini-fab class="btnNewType" (click)="addType(newTypeOnKeyup.value)"
+            <input fxFlex matInput placeholder="New Type" required #newTypeOnKeyup (keyup)="newTypeOnKeyup.value"
+                (keyup.enter)="addType(newTypeOnKeyup)" />
+            <button type="button" mat-mini-fab class="btnNewType" (click)="addType(newTypeOnKeyup)"
                 [disabled]="newTypeOnKeyup.value === ''">Add</button>
         </mat-form-field>
 
@@ -30,9 +40,6 @@
         <span id="category" fxFlex="40" fxFlex.lt-sm="80" fxLayout="column" *ngIf="selectedType.value !== 'newType'">
             <mat-form-field>
                 <mat-select placeholder="Category" required ngModel name="category" #selectedCategory>
-                    <mat-option *ngFor="let category of getCategories(selectedType.value)" [value]="category">
-                        {{category}}
-                    </mat-option>
                     <!-- newCategory option -->
                     <span *ngIf="selectedType.value !== null">
                         <mat-option value="newCategory" *ngIf="selectedType.value !== ''">
@@ -44,16 +51,25 @@
                         <mat-icon>add_circle_outline</mat-icon>
                         Fill out New Category field.
                     </mat-select-trigger>
+                    <!-- categories -->
+                    <ng-container *ngFor="let item of categories$ | async; index as i">
+                        <mat-option *ngIf="item.category !== ''" [value]="item.category">
+                            {{item.category}}
+                        </mat-option>
+                    </ng-container>
                 </mat-select>
             </mat-form-field>
             <!-- newCategory input -->
             <mat-form-field *ngIf="selectedCategory.value === 'newCategory'" fxFlex="40" fxFlex.lt-sm="80"
                 fxLayout="column">
                 <input fxFlex matInput placeholder="New Category" required #newCategoryOnKeyup
-                    (keyup)="newCategoryOnKeyup.value" />
-                <button mat-mini-fab class="btnNewType"
-                    (click)="addCategory(newCategoryOnKeyup.value, selectedType.value)"
-                    [disabled]="newCategoryOnKeyup.value === ''">Add</button>
+                    (keyup)="newCategoryOnKeyup.value"
+                    (keyup.enter)="addCategory(newCategoryOnKeyup, selectedType.value)" />
+                <button type="button" mat-mini-fab class="btnNewType"
+                    (click)="addCategory(newCategoryOnKeyup, selectedType.value)"
+                    [disabled]="newCategoryOnKeyup.value === ''">
+                    Add
+                </button>
             </mat-form-field>
         </span>
     </div>

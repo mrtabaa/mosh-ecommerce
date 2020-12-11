@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
-import { AngularFireDatabase } from '@angular/fire/database';
+import { AngularFireDatabase, SnapshotAction } from '@angular/fire/database';
 import { Observable } from 'rxjs';
+import { take } from 'rxjs/operators';
 import { Product } from '../models/product.model';
 import { ProductTypeCategory } from '../models/ProductTypes';
 
@@ -9,17 +10,32 @@ import { ProductTypeCategory } from '../models/ProductTypes';
 })
 export class NewProductService {
 
+  types$: Observable<SnapshotAction<ProductTypeCategory>[]>;
+
   constructor(private db: AngularFireDatabase) { }
 
-  addType(newType: string): void {
-    this.db.list<ProductTypeCategory>('/ProductTypeCategory/' + newType)
-      .push({
-        category: ''
-      });
+  getTypes(): Observable<ProductTypeCategory[]> {
+    this.types$ = this.db.list<ProductTypeCategory>('/ProductTypeCategory/').snapshotChanges();
+    return this.types$;
   }
 
-  getTypes(): Observable<ProductTypeCategory[]> {
-    return this.db.list<ProductTypeCategory>('/ProductTypeCategory/').snapshotChanges();
+  addType(newType: string): boolean {
+    let isAlreadyExist: boolean;
+    this.types$.pipe(take(1)).subscribe(object => {
+      for (const item of object) {
+        if (item.key === newType) { // if type already exists
+          isAlreadyExist = true;
+          break;
+        }
+        else {
+          this.db.list<ProductTypeCategory>('/ProductTypeCategory/' + newType)
+            .push({
+              category: ''
+            });
+        }
+      }
+    });
+    return isAlreadyExist;
   }
 
   addCategory(newCategory: string, selectedType: string): void {

@@ -1,11 +1,21 @@
 <form #f="ngForm" (ngSubmit)="onSubmit(f.value); f.reset();" fxLayout="column">
     <!-- 1st row -->
-    <ng-container *ngIf="isAddedType || isAddedCategory">
+    <ng-container *ngIf="(isAddedType || isAddedCategory)">
         <p *ngIf="isAddedType" class="newItemAdded" fxFlex="40" fxFlex.lt-sm="80" fxLayoutAlign="center center">
-            {{addedType}} added to the Type list.
+            <ng-container *ngIf="isAlreadyExist$ | async; else exists">
+                {{addedType}} already exists in the Type list.
+            </ng-container>
+            <ng-template #exists>
+                {{addedType}} added to the Type list.
+            </ng-template>
         </p>
         <p *ngIf="isAddedCategory" class="newItemAdded" fxFlex="40" fxFlex.lt-sm="80" fxLayoutAlign="center center">
-            {{addedCategory}} added to the {{selectedType.value}}'s category.
+            <ng-container *ngIf="isAlreadyExist$ | async; else exists">
+                {{addedCategory}} added to the {{selectedType.value}}'s category.
+            </ng-container>
+            <ng-template #exists>
+                {{addedCategory}} already exists in the {{selectedType.value}} Type.
+            </ng-template>
         </p>
     </ng-container>
     <!-- TYPE -->

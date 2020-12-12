@@ -15,6 +15,7 @@ export class NewProductComponent implements OnInit {
   addedCategory: string;
   isAddedType: boolean;
   isAddedCategory: boolean;
+  isAlreadyExist$: Observable<boolean>;
 
   types$: Observable<ProductTypeCategory[]>;
   categories$: Observable<ProductTypeCategory[]>;
@@ -23,7 +24,7 @@ export class NewProductComponent implements OnInit {
   }
 
   addType(newTypeOnKeyup: HTMLInputElement): void {
-    this.newProductService.addType(newTypeOnKeyup.value);
+    this.isAlreadyExist$ = this.newProductService.addType(newTypeOnKeyup.value); // add Type if it doesn't exist
     this.addedType = newTypeOnKeyup.value;
     newTypeOnKeyup.value = '';
     this.isAddedType = true;
@@ -43,7 +44,7 @@ export class NewProductComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.types$ = this.newProductService.getTypes();
+    this.types$ = this.newProductService.types$;
   }
 
   onSubmit($event: Product): void {

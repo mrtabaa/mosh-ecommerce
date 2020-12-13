@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFireDatabase, SnapshotAction } from '@angular/fire/database';
 import { Observable } from 'rxjs';
-import { take } from 'rxjs/operators';
+import { map, take } from 'rxjs/operators';
 import { Product } from '../models/product.model';
 import { ProductTypeCategory } from '../models/ProductTypes';
 
@@ -11,10 +11,7 @@ import { ProductTypeCategory } from '../models/ProductTypes';
 export class NewProductService {
 
   types$: Observable<SnapshotAction<ProductTypeCategory>[]>;
-  categories$: Observable<ProductTypeCategory[]>;
   typesList: string[] = [];
-  typeObj: ProductTypeCategory[] = [];
-  categoryList: string[] = [];
 
   constructor(private db: AngularFireDatabase) {
     // pre-load for better performance
@@ -47,36 +44,29 @@ export class NewProductService {
     }
   }
 
-  addCategory(newCategory: string, selectedType: string): boolean {
+  addCategory(newCategory: string, selectedType: string): Observable<boolean> {
     newCategory = newCategory.toLowerCase();
     selectedType = selectedType.toLowerCase();
 
-    if (this.categoryList.includes(newCategory)) {
-      return false;
-    }
-
-    this.db.list<ProductTypeCategory>('/ProductTypeCategory/' + selectedType)
-      .push({
-        category: newCategory
-      });
-    this.categoryList.push(newCategory);
-    return true;
+    return this.db.list<ProductTypeCategory>('/ProductTypeCategory/' + selectedType.toLowerCase()).valueChanges()
+      .pipe(
+        map(obj => {
+          for (const iterator of obj) {
+            if (iterator.category === newCategory) {
+              return true;
+            }
+          }
+          this.db.list<ProductTypeCategory>('/ProductTypeCategory/' + selectedType)
+            .push({
+              category: newCategory
+            });
+          return false;
+        })
+      );
   }
 
-  getCategory(selectedType: string): string[] {
-    selectedType = selectedType.toLowerCase();
-
-    this.categories$ = this.db.list<ProductTypeCategory>('/ProductTypeCategory/' + selectedType).valueChanges();
-    this.categories$.pipe(take(1))
-      .subscribe(obj => {
-        for (const iterator of obj) {
-          if (!(this.categoryList.includes(iterator.category) || iterator.category === '')) {
-            this.categoryList.push(iterator.category);
-          }
-        }
-      });
-    console.log(this.categoryList);
-    return this.categoryList;
+  getCategory(selectedType: string): Observable<ProductTypeCategory[]> {
+    return this.db.list<ProductTypeCategory>('/ProductTypeCategory/' + selectedType.toLowerCase()).valueChanges();
   }
 
   createProduct(product: Product): void {

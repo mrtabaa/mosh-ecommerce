@@ -15,16 +15,17 @@ export class NewProductComponent implements OnInit {
   addedCategory: string;
   isAddedType: boolean;
   isAddedCategory: boolean;
-  isAlreadyExist: boolean;
+  isTypeExist: boolean;
+  isCategoryExist$: Observable<boolean>;
   types: string[];
-  categories: string[];
+  categories$: Observable<ProductTypeCategory[]>;
 
   constructor(private newProductService: NewProductService) {
     this.types = this.newProductService.typesList;
   }
 
   addType(newTypeOnKeyup: HTMLInputElement): void {
-    this.isAlreadyExist = this.newProductService.addType(newTypeOnKeyup.value); // add Type if it doesn't exist
+    this.isTypeExist = this.newProductService.addType(newTypeOnKeyup.value); // add Type if it doesn't exist
     this.addedType = newTypeOnKeyup.value;
     newTypeOnKeyup.value = '';
     this.isAddedType = true;
@@ -32,12 +33,11 @@ export class NewProductComponent implements OnInit {
   }
 
   getCategories(itemType: string): void {
-    this.categories = [];
-    this.categories = this.newProductService.getCategory(itemType);
+    this.categories$ = this.newProductService.getCategory(itemType);
   }
 
   addCategory(newCategoryOnKeyup: HTMLInputElement, selectedType: string): void {
-    this.isAlreadyExist = this.newProductService.addCategory(newCategoryOnKeyup.value, selectedType);
+    this.isCategoryExist$ = this.newProductService.addCategory(newCategoryOnKeyup.value, selectedType);
     this.addedCategory = newCategoryOnKeyup.value;
     newCategoryOnKeyup.value = '';
     this.isAddedType = false;

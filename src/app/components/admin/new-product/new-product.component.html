@@ -75,7 +75,7 @@
                     <!-- Print Categories -->
                     <ng-container *ngFor="let item of categories$ | async">
                         <mat-option [value]="item.category" *ngIf="item.category !== ''">
-                            {{item.category | titlecase}}
+                            {{item.category | uppercase}}
                         </mat-option>
                     </ng-container>
                 </mat-select>

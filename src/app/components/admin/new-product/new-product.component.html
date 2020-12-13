@@ -5,7 +5,7 @@
     <ng-container *ngIf="(isAddedType || isAddedCategory)">
         <!-- New Type -->
         <p *ngIf="isAddedType" class="newItemAdded" fxFlex="40" fxFlex.lt-sm="80" fxLayoutAlign="center center">
-            <ng-container *ngIf="isAlreadyExist; else added">
+            <ng-container *ngIf="isTypeExist; else added">
                 <label class="alreadyExists">
                     {{addedType}} already exists in the Type list.
                 </label>
@@ -16,13 +16,13 @@
         </p>
         <!-- New Category -->
         <p *ngIf="isAddedCategory" class="newItemAdded" fxFlex="40" fxFlex.lt-sm="80" fxLayoutAlign="center center">
-            <ng-container *ngIf="isAlreadyExist; else added">
-                {{addedCategory}} added to the {{selectedType.value | titlecase}}'s category.
-            </ng-container>
-            <ng-template #added>
+            <ng-container *ngIf="isCategoryExist$ | async; else added">
                 <span class="alreadyExists">
                     {{addedCategory}} already exists in the {{selectedType.value | titlecase}} Type.
                 </span>
+            </ng-container>
+            <ng-template #added>
+                {{addedCategory}} added to the {{selectedType.value | titlecase}}'s category.
             </ng-template>
         </p>
     </ng-container>
@@ -73,9 +73,9 @@
                     </mat-select-trigger>
 
                     <!-- Print Categories -->
-                    <ng-container *ngFor="let category of categories">
-                        <mat-option [value]="category">
-                            {{category | titlecase}}
+                    <ng-container *ngFor="let item of categories$ | async">
+                        <mat-option [value]="item.category" *ngIf="item.category !== ''">
+                            {{item.category | titlecase}}
                         </mat-option>
                     </ng-container>
                 </mat-select>
@@ -114,5 +114,6 @@
     </div>
     <!-- 4rd row -->
       <p>{{ f.value | json }}</p>
-    <button fxFlexAlign="center" mat-raised-button color="primary" [disabled]="f.invalid" class="btnSave">Save</button>
+    <button fxFlexAlign="center" mat-raised-button color="primary"
+        [disabled]="f.invalid || f.value.category === 'newCategory'" class="btnSave">Save</button>
 </form>

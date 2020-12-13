@@ -46,11 +46,16 @@ export class NewProductService {
   }
 
   addCategory(newCategory: string, selectedType: string): boolean {
+    if (this.categoryList.includes(newCategory)) {
+      return false;
+    }
+
     this.db.list<ProductTypeCategory>('/ProductTypeCategory/' + selectedType)
       .push({
         category: newCategory
       });
-    return null;
+    this.categoryList.push(newCategory);
+    return true;
   }
 
   getCategory(selectedType: string): string[] {

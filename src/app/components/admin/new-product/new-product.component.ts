@@ -36,7 +36,7 @@ export class NewProductComponent implements OnInit {
   }
 
   addCategory(newCategoryOnKeyup: HTMLInputElement, selectedType: string): void {
-    this.newProductService.addCategory(newCategoryOnKeyup.value, selectedType);
+    this.isAlreadyExist = this.newProductService.addCategory(newCategoryOnKeyup.value, selectedType);
     this.addedCategory = newCategoryOnKeyup.value;
     newCategoryOnKeyup.value = '';
     this.isAddedType = false;

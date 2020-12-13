@@ -32,6 +32,7 @@ export class NewProductComponent implements OnInit {
   }
 
   getCategories(itemType: string): void {
+    this.categories = [];
     this.categories = this.newProductService.getCategory(itemType);
   }
 

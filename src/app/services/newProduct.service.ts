@@ -32,6 +32,8 @@ export class NewProductService {
   }
 
   addType(newType: string): boolean {
+    newType = newType.toLowerCase();
+
     if (this.typesList.includes(newType)) {
       return true;
     }
@@ -46,6 +48,9 @@ export class NewProductService {
   }
 
   addCategory(newCategory: string, selectedType: string): boolean {
+    newCategory = newCategory.toLowerCase();
+    selectedType = selectedType.toLowerCase();
+
     if (this.categoryList.includes(newCategory)) {
       return false;
     }
@@ -59,11 +64,13 @@ export class NewProductService {
   }
 
   getCategory(selectedType: string): string[] {
+    selectedType = selectedType.toLowerCase();
+
     this.categories$ = this.db.list<ProductTypeCategory>('/ProductTypeCategory/' + selectedType).valueChanges();
     this.categories$.pipe(take(1))
       .subscribe(obj => {
         for (const iterator of obj) {
-          if (iterator.category !== '') {
+          if (!(this.categoryList.includes(iterator.category) || iterator.category === '')) {
             this.categoryList.push(iterator.category);
           }
         }

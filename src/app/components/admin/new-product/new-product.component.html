@@ -6,9 +6,9 @@
         <!-- New Type -->
         <p *ngIf="isAddedType" class="newItemAdded" fxFlex="40" fxFlex.lt-sm="80" fxLayoutAlign="center center">
             <ng-container *ngIf="isAlreadyExist; else added">
-                <span class="isAlreadyExist">
+                <label class="alreadyExists">
                     {{addedType}} already exists in the Type list.
-                </span>
+                </label>
             </ng-container>
             <ng-template #added>
                 {{addedType}} added to the Type list.
@@ -17,11 +17,11 @@
         <!-- New Category -->
         <p *ngIf="isAddedCategory" class="newItemAdded" fxFlex="40" fxFlex.lt-sm="80" fxLayoutAlign="center center">
             <ng-container *ngIf="isAlreadyExist; else added">
-                {{addedCategory}} added to the {{selectedType.value}}'s category.
+                {{addedCategory}} added to the {{selectedType.value | titlecase}}'s category.
             </ng-container>
             <ng-template #added>
-                <span class="isAlreadyExist">
-                    {{addedCategory}} already exists in the {{selectedType.value}} Type.
+                <span class="alreadyExists">
+                    {{addedCategory}} already exists in the {{selectedType.value | titlecase}} Type.
                 </span>
             </ng-template>
         </p>
@@ -44,7 +44,7 @@
 
                 <!-- ptint Types -->
                 <mat-option *ngFor="let type of types" [value]="type" (click)="getCategories(type)">
-                    {{type}}
+                    {{type | titlecase}}
                 </mat-option>
             </mat-select>
         </mat-form-field>
@@ -75,7 +75,7 @@
                     <!-- Print Categories -->
                     <ng-container *ngFor="let category of categories">
                         <mat-option [value]="category">
-                            {{category}}
+                            {{category | titlecase}}
                         </mat-option>
                     </ng-container>
                 </mat-select>

@@ -11,22 +11,25 @@ import { ProductTypeCategory } from '../models/ProductTypes';
 export class NewProductService {
 
   types$: Observable<SnapshotAction<ProductTypeCategory>[]>;
-  isExist$: Observable<boolean>;
-  typeList = [''];
+  categories$: Observable<ProductTypeCategory[]>;
+  types: string[] = [];
+  categoriesList: string[] = [];
 
   constructor(private db: AngularFireDatabase) {
     this.types$ = this.db.list<ProductTypeCategory>('/ProductTypeCategory/').snapshotChanges();
     this.types$.pipe(take(1)).subscribe(obj => {
       obj.forEach(element => {
         if (element) {
-          this.typeList.push(element.key);
+          this.types.push(element.key);
         }
       });
     });
+
+    this.categories$ = this.db.list<ProductTypeCategory>('/ProductTypeCategory/').valueChanges();
   }
 
   addType(newType: string): Observable<boolean> {
-    if (this.typeList.includes(newType)) {
+    if (this.types.includes(newType)) {
       return of(true);
     }
     else {
@@ -34,7 +37,7 @@ export class NewProductService {
         .push({
           category: ''
         });
-      this.typeList.push(newType);
+      this.types.push(newType);
       return of(false);
     }
   }
@@ -46,9 +49,17 @@ export class NewProductService {
       });
   }
 
-
-  getCategory(selectedType: string): Observable<ProductTypeCategory[]> {
-    return this.db.list<ProductTypeCategory>('/ProductTypeCategory/' + selectedType).valueChanges();
+  getCategory(selectedType: string): string[] {
+    this.categories$.pipe(take(1)).subscribe(obj => {
+      obj.forEach(element => {
+        if (element.type === selectedType) {
+          this.categoriesList.push(element.category);
+        }
+      });
+    });
+    console.log(this.categoriesList);
+    console.log(this.categories$);
+    return this.categoriesList;
   }
 
   createProduct(product: Product): void {

@@ -33,8 +33,8 @@
                     Fill out New Type field.
                 </mat-select-trigger>
                 <!-- types -->
-                <mat-option *ngFor="let item of types$ | async" [value]="item.key" (click)="getCategories(item.key)">
-                    {{item.key}}
+                <mat-option *ngFor="let type of types" [value]="type" (click)="getCategories(type)">
+                    {{type}}
                 </mat-option>
             </mat-select>
         </mat-form-field>
@@ -62,9 +62,9 @@
                         Fill out New Category field.
                     </mat-select-trigger>
                     <!-- categories -->
-                    <ng-container *ngFor="let item of categories$ | async; index as i">
-                        <mat-option *ngIf="item.category !== ''" [value]="item.category">
-                            {{item.category}}
+                    <ng-container *ngFor="let category of categories;">
+                        <mat-option *ngIf="category !== ''" [value]="category">
+                            {{category}}
                         </mat-option>
                     </ng-container>
                 </mat-select>

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { Product } from 'src/app/models/product.model';
 import { ProductTypeCategory } from 'src/app/models/ProductTypes';
@@ -10,41 +11,72 @@ import { NewProductService } from 'src/app/services/newProduct.service';
   styleUrls: ['./new-product.component.scss']
 })
 export class NewProductComponent implements OnInit {
-  tempType: string;
-  addedType: string;
-  addedCategory: string;
-  isAddedType: boolean;
-  isAddedCategory: boolean;
+  form: FormGroup;
+
+  isTypeAdded: boolean;
+  isCategoryAdded: boolean;
   isTypeExist: boolean;
   isCategoryExist$: Observable<boolean>;
   types: string[];
   categories$: Observable<ProductTypeCategory[]>;
 
-  constructor(private newProductService: NewProductService) {
+  constructor(private newProductService: NewProductService, private fb: FormBuilder) {
+    // get types
     this.types = this.newProductService.typesList;
-  }
-
-  addType(newTypeOnKeyup: HTMLInputElement): void {
-    this.isTypeExist = this.newProductService.addType(newTypeOnKeyup.value); // add Type if it doesn't exist
-    this.addedType = newTypeOnKeyup.value;
-    newTypeOnKeyup.value = '';
-    this.isAddedType = true;
-    this.isAddedCategory = false;
   }
 
   getCategories(itemType: string): void {
     this.categories$ = this.newProductService.getCategory(itemType);
   }
 
-  addCategory(newCategoryOnKeyup: HTMLInputElement, selectedType: string): void {
-    this.isCategoryExist$ = this.newProductService.addCategory(newCategoryOnKeyup.value, selectedType);
-    this.addedCategory = newCategoryOnKeyup.value;
-    newCategoryOnKeyup.value = '';
-    this.isAddedType = false;
-    this.isAddedCategory = true;
+  ngOnInit(): void {
+    this.form = this.fb.group({
+      type: [],
+      category: [],
+      title: [],
+      price: [],
+      imageUrl: [],
+
+      newType: [],
+      newCategory: []
+    });
   }
 
-  ngOnInit(): void {
+  addType(type: HTMLInputElement): void {
+    this.isTypeExist = this.newProductService.addType(type.value); // add Type if it doesn't exist
+    this.Type.setValue(type.value);
+    this.isTypeAdded = true;
+    this.isCategoryAdded = false;
+  }
+
+  addCategory(newCategoryOnKeyup: HTMLInputElement, selectedType: string): void {
+    // this.newProductService.addCategory(newCategoryOnKeyup.value, selectedType);
+    // this.isAddedType = false;
+    // this.isAddedCategory = true;
+  }
+
+  // FORM
+  get Type(): AbstractControl {
+    return this.form.get('type');
+  }
+  get Category(): AbstractControl {
+    return this.form.get('category');
+  }
+  get Title(): AbstractControl {
+    return this.form.get('title');
+  }
+  get Price(): AbstractControl {
+    return this.form.get('price');
+  }
+  get ImageUrl(): AbstractControl {
+    return this.form.get('imageUrl');
+  }
+
+  get NewType(): AbstractControl {
+    return this.form.get('newType');
+  }
+  get NewCategory(): AbstractControl {
+    return this.form.get('newCategory');
   }
 
   onSubmit($event: Product): void {

@@ -1,0 +1,24 @@
+form {
+  margin-top: 10%;
+}
+
+.btnNewType {
+  background-color: #536DFE;
+  color: white;
+}
+
+.btnSave {
+  margin-top: 5%;
+  width: 30%;
+}
+
+.newItemAdded {
+  background-color: #FCE4EC;
+  color: #283593;
+  padding: 1em;
+}
+
+.alreadyExists {
+  color: red;
+}
+/*# sourceMappingURL=new-product.component.css.map */

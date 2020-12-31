@@ -22,7 +22,7 @@ import { NewProductService } from './services/newProduct.service';
     AppRoutingModule,
 
     ComponentModule, // Contains:
-    // Components, BrowserAnimationsModule, FormsModule, MaterialModule, FlexLayoutModule
+    // Components, BrowserAnimationsModule, ReactiveFormsModule, MaterialModule, FlexLayoutModule
 
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,

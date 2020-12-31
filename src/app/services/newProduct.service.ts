@@ -19,7 +19,7 @@ export class NewProductService {
   }
 
   private getTypes(): void {
-    this.types$ = this.db.list<ProductTypeCategory>('/ProductTypeCategory/').snapshotChanges();
+    this.types$ = this.db.list<ProductTypeCategory>('/typeAndCategory/').snapshotChanges();
     this.types$.pipe(take(1))
       .subscribe(obj => {
         for (const iterator of obj) {
@@ -35,7 +35,7 @@ export class NewProductService {
       return true;
     }
     else {
-      this.db.list<ProductTypeCategory>('/ProductTypeCategory/' + newType)
+      this.db.list<ProductTypeCategory>('/typeAndCategory/' + newType)
         .push({
           category: ''
         });
@@ -44,29 +44,43 @@ export class NewProductService {
     }
   }
 
-  addCategory(newCategory: string, selectedType: string): Observable<boolean> {
+  async addCategory(newCategory: string, selectedType: string): Promise<void> {
     newCategory = newCategory.toLowerCase();
     selectedType = selectedType.toLowerCase();
 
-    return this.db.list<ProductTypeCategory>('/ProductTypeCategory/' + selectedType.toLowerCase()).valueChanges()
-      .pipe(
-        map(obj => {
-          for (const iterator of obj) {
-            if (iterator.category === newCategory) {
-              return true;
-            }
-          }
-          this.db.list<ProductTypeCategory>('/ProductTypeCategory/' + selectedType)
-            .push({
-              category: newCategory
-            });
-          return false;
-        })
-      );
+    this.db.list<string>('/typeAndCategory/' + selectedType.toLowerCase()).valueChanges();
+
+
+    // .toPromise((resolve, reject) => {
+
+    // }).then(data => {
+    //   for (const iterator of data) {
+    //     if (iterator === newCategory) {
+    //       console.log(couter++);
+    //       console.log(iterator);
+    //       return false;
+    //     }
+    //   }
+    // });
+    // .pipe(
+    //   map(obj => {
+    //     console.log('test');
+    //     for (const iterator of obj) {
+    //       if (iterator.category === newCategory) {
+    //         return true;
+    //       }
+    //     }
+    //     this.db.list<ProductTypeCategory>('/ProductTypeCategory/' + selectedType)
+    //       .push({
+    //         category: newCategory
+    //       });
+    //     return false;
+    //   })
+    // );
   }
 
   getCategory(selectedType: string): Observable<ProductTypeCategory[]> {
-    return this.db.list<ProductTypeCategory>('/ProductTypeCategory/' + selectedType.toLowerCase()).valueChanges();
+    return this.db.list<ProductTypeCategory>('/typeAndCategory/' + selectedType.toLowerCase()).valueChanges();
   }
 
   createProduct(product: Product): void {

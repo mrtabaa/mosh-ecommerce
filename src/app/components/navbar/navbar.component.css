@@ -1,0 +1,13 @@
+.brand a {
+  text-decoration: none;
+  color: white;
+}
+
+.displayName {
+  padding-left: 10px;
+}
+
+.gt-tablet-btns {
+  margin-right: 20px;
+}
+/*# sourceMappingURL=navbar.component.css.map */

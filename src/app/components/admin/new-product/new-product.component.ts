@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormControl, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { Product } from 'src/app/models/product.model';
 import { ProductTypeCategory } from 'src/app/models/ProductTypes';
 import { NewProductService } from 'src/app/services/newProduct.service';
+import { TypeValidator } from './validators/type.validator';
 
 @Component({
   selector: 'app-new-product',
@@ -37,8 +38,8 @@ export class NewProductComponent implements OnInit {
       price: [],
       imageUrl: [],
 
-      newType: [],
-      newCategory: []
+      newType: ['', [TypeValidator.checkUniqueType(this.types)]],
+      newCategory: [],
     });
   }
 
@@ -53,6 +54,10 @@ export class NewProductComponent implements OnInit {
     // this.newProductService.addCategory(newCategoryOnKeyup.value, selectedType);
     // this.isAddedType = false;
     // this.isAddedCategory = true;
+  }
+
+  onSubmit($event: Product): void {
+    this.newProductService.createProduct($event);
   }
 
   // FORM
@@ -77,9 +82,5 @@ export class NewProductComponent implements OnInit {
   }
   get NewCategory(): AbstractControl {
     return this.form.get('newCategory');
-  }
-
-  onSubmit($event: Product): void {
-    this.newProductService.createProduct($event);
   }
 }

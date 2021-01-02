@@ -12,6 +12,7 @@ import { environment } from 'src/environments/environment.prod';
 import { AuthService } from './services/auth.service';
 import { UserService } from './services/user.service';
 import { NewProductService } from './services/newProduct.service';
+import { TypeValidator } from './components/admin/new-product/validators/type.validator';
 
 @NgModule({
   declarations: [
@@ -31,7 +32,8 @@ import { NewProductService } from './services/newProduct.service';
   providers: [
     AuthService,
     UserService,
-    NewProductService
+    NewProductService,
+    TypeValidator
   ],
   bootstrap: [AppComponent]
 })

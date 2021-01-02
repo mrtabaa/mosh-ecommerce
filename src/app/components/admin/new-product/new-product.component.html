@@ -62,6 +62,9 @@
                     <mat-error *ngIf="NewType.hasError('required')">
                         Enter a value Or select a predefined Type.
                     </mat-error>
+                    <mat-error *ngIf="NewType.hasError('typeNotUnique')">
+                        Type already exists.
+                    </mat-error>
                 </mat-form-field>
             </ng-container>
 
@@ -109,10 +112,6 @@
             </ng-conainer>
         </ng-conainer>
     </ng-container>
-
-
-
-
 
 
 

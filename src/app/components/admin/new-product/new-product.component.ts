@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { Observable } from 'rxjs';
 import { Product } from 'src/app/models/product.model';
 import { ProductTypeCategory } from 'src/app/models/ProductTypes';
@@ -16,7 +16,6 @@ export class NewProductComponent implements OnInit {
 
   isTypeAdded: boolean;
   isCategoryAdded: boolean;
-  isTypeExist: boolean;
   isCategoryExist$: Observable<boolean>;
   types: string[];
   categories$: Observable<ProductTypeCategory[]>;
@@ -38,16 +37,25 @@ export class NewProductComponent implements OnInit {
       price: [],
       imageUrl: [],
 
-      newType: ['', [TypeValidator.checkUniqueType(this.types)]],
+      newType: ['', {
+        validators: [TypeValidator.checkUniqueType(this.types)],
+        asyncValidators: [],
+        updateOn: 'change'
+      }],
       newCategory: [],
     });
   }
 
   addType(type: HTMLInputElement): void {
-    this.isTypeExist = this.newProductService.addType(type.value); // add Type if it doesn't exist
-    this.Type.setValue(type.value);
-    this.isTypeAdded = true;
-    this.isCategoryAdded = false;
+    if (this.NewType.valid) {
+      this.newProductService.addType(type.value); // add Type if it doesn't exist
+      this.Type.setValue(type.value);
+      this.isTypeAdded = true;
+      this.isCategoryAdded = false;
+    }
+    else {
+      this.isTypeAdded = false;
+    }
   }
 
   addCategory(newCategoryOnKeyup: HTMLInputElement, selectedType: string): void {

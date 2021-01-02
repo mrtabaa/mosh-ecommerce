@@ -28,20 +28,13 @@ export class NewProductService {
       });
   }
 
-  addType(newType: string): boolean {
+  addType(newType: string): void {
     newType = newType.toLowerCase();
-
-    if (this.typesList.includes(newType)) {
-      return true;
-    }
-    else {
-      this.db.list<ProductTypeCategory>('/typeAndCategory/' + newType)
-        .push({
-          category: ''
-        });
-      this.typesList.push(newType);
-      return false;
-    }
+    this.db.list<ProductTypeCategory>('/typeAndCategory/' + newType)
+      .push({
+        category: ''
+      });
+    this.typesList.push(newType);
   }
 
   async addCategory(newCategory: string, selectedType: string): Promise<void> {

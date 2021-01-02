@@ -5,26 +5,12 @@
         <!-- NEW TYPE/CATEGORY WARNINGS -->
         <ng-container *ngIf="(isTypeAdded || isCategoryAdded)">
             <!-- New Type -->
-            <p *ngIf="isAddedType" class="newItemAdded" fxFlex="40" fxFlex.lt-sm="80" fxLayoutAlign="center center">
-                <ng-container *ngIf="isTypeExist; else added">
-                    <label class="alreadyExists">
-                        {{addedType}} already exists in the Type list.
-                    </label>
-                </ng-container>
-                <ng-template #added>
-                    {{addedType}} added to the Type list.
-                </ng-template>
+            <p *ngIf="isTypeAdded" class="newItemAdded" fxFlex="40" fxFlex.lt-sm="80" fxLayoutAlign="center center">
+                {{NewType.value | titlecase}} added to the Type list.
             </p>
             <!-- New Category -->
-            <p *ngIf="isAddedCategory" class="newItemAdded" fxFlex="40" fxFlex.lt-sm="80" fxLayoutAlign="center center">
-                <ng-container *ngIf="isCategoryExist$ | async; else added">
-                    <span class="alreadyExists">
-                        {{addedCategory}} already exists in the {{Type.value | titlecase}} Type.
-                    </span>
-                </ng-container>
-                <ng-template #added>
-                    {{addedCategory}} added to the {{Type.value | titlecase}}'s category.
-                </ng-template>
+            <p *ngIf="isCategoryAdded" class="newItemAdded" fxFlex="40" fxFlex.lt-sm="80" fxLayoutAlign="center center">
+                {{NewCategory.value | titlecase}} added to the {{NewType.value | titlecase}}'s category.
             </p>
         </ng-container>
 
@@ -51,11 +37,10 @@
                     </mat-select>
                     <mat-error *ngIf="Type.hasError('required')">Please select a Type or create one.</mat-error>
                 </mat-form-field>
-
                 <!-- input -->
                 <mat-form-field *ngIf="Type.value === 'newType'" fxFlex="40" fxFlex.lt-sm="80" fxLayout="column">
                     <input formControlName="newType" [required]="true" fxFlex matInput placeholder="New Type"
-                        (keyup.enter)="addType(NewType)" />
+                        (keyup.enter)="addType(NewType)" (keyup)="NewType.markAsDirty()" />
                     <button type="button" mat-mini-fab class="btnNewType" (click)="addType(NewType)"
                         [disabled]="NewType.invalid">Add
                     </button>

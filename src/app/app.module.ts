@@ -12,7 +12,9 @@ import { environment } from 'src/environments/environment.prod';
 import { AuthService } from './services/auth.service';
 import { UserService } from './services/user.service';
 import { NewProductService } from './services/newProduct.service';
-import { TypeValidator } from './components/admin/new-product/validators/type.validator';
+
+import { ErrorStateMatcher } from '@angular/material/core';
+import { TouchedErrorStateMatcher } from './common/validators/touched-error-state.matcher';
 
 @NgModule({
   declarations: [
@@ -33,7 +35,7 @@ import { TypeValidator } from './components/admin/new-product/validators/type.va
     AuthService,
     UserService,
     NewProductService,
-    TypeValidator
+    { provide: ErrorStateMatcher, useClass: TouchedErrorStateMatcher }
   ],
   bootstrap: [AppComponent]
 })

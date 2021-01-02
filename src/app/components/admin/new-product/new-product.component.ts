@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { Product } from 'src/app/models/product.model';
 import { ProductTypeCategory } from 'src/app/models/ProductTypes';
 import { NewProductService } from 'src/app/services/newProduct.service';
-import { TypeValidator } from './validators/type.validator';
+import { TypeCategoryValidators } from './validators/type-category.validator';
 
 @Component({
   selector: 'app-new-product',
@@ -38,7 +38,7 @@ export class NewProductComponent implements OnInit {
       imageUrl: [],
 
       newType: ['', {
-        validators: [TypeValidator.checkUniqueType(this.types)],
+        validators: [TypeCategoryValidators.checkUniqueType(this.types)],
         asyncValidators: [],
         updateOn: 'change'
       }],

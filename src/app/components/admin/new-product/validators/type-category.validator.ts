@@ -1,6 +1,6 @@
 import { AbstractControl, ValidationErrors } from '@angular/forms';
 
-export class TypeValidator {
+export class TypeCategoryValidators {
 
     // check Type uniqueness
     static checkUniqueType(types: string[]): ValidationErrors | null {

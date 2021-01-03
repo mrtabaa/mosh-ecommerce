@@ -1,8 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
-import { Observable } from 'rxjs';
+import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
 import { Product } from 'src/app/models/product.model';
-import { ProductTypeCategory } from 'src/app/models/ProductTypes';
 import { NewProductService } from 'src/app/services/newProduct.service';
 import { TypeCategoryValidators } from './validators/type-category.validator';
 
@@ -56,9 +54,7 @@ export class NewProductComponent implements OnInit {
   }
 
   addCategory(newCategoryOnKeyup: HTMLInputElement, selectedType: string): void {
-    // this.newProductService.addCategory(newCategoryOnKeyup.value, selectedType);
-    // this.isAddedType = false;
-    // this.isAddedCategory = true;
+    this.newProductService.addCategory(newCategoryOnKeyup.value, selectedType);
   }
 
   onSubmit($event: Product): void {

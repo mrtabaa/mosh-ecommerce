@@ -14,19 +14,16 @@ import { TypeCategoryValidators } from './validators/type-category.validator';
 export class NewProductComponent implements OnInit {
   form: FormGroup;
 
-  isTypeAdded: boolean;
-  isCategoryAdded: boolean;
-  isCategoryExist$: Observable<boolean>;
   types: string[];
-  categories$: Observable<ProductTypeCategory[]>;
+  categories: string[];
 
   constructor(private newProductService: NewProductService, private fb: FormBuilder) {
-    // get types
-    this.types = this.newProductService.typesList;
+    this.types = this.newProductService.typesList; // get types
   }
 
-  getCategories(itemType: string): void {
-    this.categories$ = this.newProductService.getCategory(itemType);
+  getCategories(itemType: string): string[] {
+    this.Category.setValue(null);
+    return this.categories = this.newProductService.getCategory(itemType);
   }
 
   ngOnInit(): void {
@@ -43,18 +40,18 @@ export class NewProductComponent implements OnInit {
         updateOn: 'change'
       }],
       newCategory: [],
+      addedType: [],
+      addedCategory: []
     });
   }
 
   addType(type: HTMLInputElement): void {
     if (this.NewType.valid) {
       this.newProductService.addType(type.value); // add Type if it doesn't exist
+      this.AddedType.setValue(type.value);
       this.Type.setValue(type.value);
-      this.isTypeAdded = true;
-      this.isCategoryAdded = false;
-    }
-    else {
-      this.isTypeAdded = false;
+      this.NewType.setValue('');
+      this.NewType.markAsPristine();
     }
   }
 
@@ -90,5 +87,11 @@ export class NewProductComponent implements OnInit {
   }
   get NewCategory(): AbstractControl {
     return this.form.get('newCategory');
+  }
+  get AddedType(): AbstractControl {
+    return this.form.get('addedType');
+  }
+  get AddedCategory(): AbstractControl {
+    return this.form.get('addedCategory');
   }
 }

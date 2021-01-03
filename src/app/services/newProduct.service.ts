@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { AngularFireDatabase, SnapshotAction } from '@angular/fire/database';
+import { AngularFireDatabase } from '@angular/fire/database';
 import { Observable } from 'rxjs';
-import { map, take } from 'rxjs/operators';
+import { take } from 'rxjs/operators';
 import { Product } from '../models/product.model';
 import { ProductTypeCategory } from '../models/ProductTypes';
 
@@ -10,7 +10,6 @@ import { ProductTypeCategory } from '../models/ProductTypes';
 })
 export class NewProductService {
 
-  types$: Observable<SnapshotAction<ProductTypeCategory>[]>;
   typesList: string[] = [];
 
   constructor(private db: AngularFireDatabase) {
@@ -19,8 +18,8 @@ export class NewProductService {
   }
 
   private getTypes(): void {
-    this.types$ = this.db.list<ProductTypeCategory>('/typeAndCategory/').snapshotChanges();
-    this.types$.pipe(take(1))
+    this.db.list<ProductTypeCategory>('/typeAndCategory/').snapshotChanges()
+      .pipe(take(1))
       .subscribe(obj => {
         for (const iterator of obj) {
           this.typesList.push(iterator.key);
@@ -41,39 +40,21 @@ export class NewProductService {
     newCategory = newCategory.toLowerCase();
     selectedType = selectedType.toLowerCase();
 
-    this.db.list<string>('/typeAndCategory/' + selectedType.toLowerCase()).valueChanges();
-
-
-    // .toPromise((resolve, reject) => {
-
-    // }).then(data => {
-    //   for (const iterator of data) {
-    //     if (iterator === newCategory) {
-    //       console.log(couter++);
-    //       console.log(iterator);
-    //       return false;
-    //     }
-    //   }
-    // });
-    // .pipe(
-    //   map(obj => {
-    //     console.log('test');
-    //     for (const iterator of obj) {
-    //       if (iterator.category === newCategory) {
-    //         return true;
-    //       }
-    //     }
-    //     this.db.list<ProductTypeCategory>('/ProductTypeCategory/' + selectedType)
-    //       .push({
-    //         category: newCategory
-    //       });
-    //     return false;
-    //   })
-    // );
+    this.db.list<string>('/typeAndCategory/' + selectedType).valueChanges();
   }
 
-  getCategory(selectedType: string): Observable<ProductTypeCategory[]> {
-    return this.db.list<ProductTypeCategory>('/typeAndCategory/' + selectedType.toLowerCase()).valueChanges();
+  getCategory(selectedType: string): string[] {
+    const categoryList: string[] = [];
+    this.db.list<ProductTypeCategory>('/typeAndCategory/' + selectedType.toLowerCase()).valueChanges()
+      .pipe(take(1))
+      .subscribe(obj => {
+        for (const iterator of obj) {
+          if (iterator.category !== '') {
+            categoryList.push(iterator.category);
+          }
+        }
+      });
+    return categoryList;
   }
 
   createProduct(product: Product): void {

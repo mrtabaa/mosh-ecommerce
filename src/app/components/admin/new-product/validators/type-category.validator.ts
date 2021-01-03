@@ -6,7 +6,7 @@ export class TypeCategoryValidators {
     static checkUniqueType(types: string[]): ValidationErrors | null {
         return (control: AbstractControl) => {
             if (types && types.includes((control.value as string).toLowerCase())) {
-                return { typeNotUnique: true };
+                return { uniqueType: true };
             }
             return null;
         };

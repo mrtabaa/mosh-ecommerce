@@ -9,13 +9,13 @@ export class NewProductService {
 
   constructor(private db: AngularFireDatabase) { }
 
-  createProduct(product: Product): void {
+  async createProduct(product: Product): Promise<void> {
     if (product.type !== 'newType' && product.category !== 'newCategory') {
-      this.db.list<Product>('/products/' + product.type + '/' + product.category)
+      await this.db.list<Product>('/products/' + product.type + '/' + product.category)
         .push({
           imageUrl: product.imageUrl,
           price: product.price,
-          title: product.title
+          title: product.title,
         });
     }
   }

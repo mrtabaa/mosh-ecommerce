@@ -25,13 +25,6 @@ export class TypeCategoryService {
       });
   }
 
-  addType(newType: string): void {
-    newType = newType.toLowerCase();
-    this.db.list<string>('/typeAndCategory/' + newType)
-      .push('');
-    this.typesList.push(newType);
-  }
-
   getCategory(selectedType: string): string[] {
     this.categoryList = [];
     this.db.list<string>('/typeAndCategory/' + selectedType.toLowerCase()).valueChanges()
@@ -46,17 +39,24 @@ export class TypeCategoryService {
     return this.categoryList;
   }
 
+  async addType(newType: string): Promise<void> {
+    newType = newType.toLowerCase();
+
+    await this.db.list<string>('/typeAndCategory/' + newType)
+      .push('');
+
+    this.typesList.push(newType);
+  }
+
   async addCategory(newCategory: string, selectedType: string): Promise<string[]> {
     newCategory = newCategory.toLowerCase();
     selectedType = selectedType.toLowerCase();
 
-    if (!this.categoryList.includes(newCategory)) {
-      await this.db.list<string>('/typeAndCategory/' + selectedType)
-        .push(newCategory);
+    await this.db.list<string>('/typeAndCategory/' + selectedType)
+      .push(newCategory);
 
-      this.categoryList.push(newCategory);
-    }
-    console.log(this.categoryList);
+    this.categoryList.push(newCategory);
+
     return this.categoryList;
   }
 }

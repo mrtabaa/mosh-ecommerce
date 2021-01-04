@@ -49,7 +49,7 @@
                         Enter a value Or select a predefined Type.
                     </mat-error>
                     <mat-error *ngIf="NewType.hasError('uniqueType')">
-                        Type already exists.
+                        Type {{NewType.value | titlecase}} already exists.
                     </mat-error>
                 </mat-form-field>
             </ng-container>
@@ -82,21 +82,28 @@
                 </mat-form-field>
 
                 <!-- NewCategory input -->
-                <mat-form-field *ngIf="Category.value === 'newCategory'" fxFlex="40" fxFlex.lt-sm="80"
-                    fxLayout="column">
-                    <input formControlName="newCategory" [required]="true" fxFlex matInput placeholder="New Category"
-                        (keyup)="NewCategory.value" (keyup.enter)="addCategory(NewCategory, Type.value)" />
+                <mat-form-field formGroupName="newCategoryGroup" *ngIf="Category.value === 'newCategory'" fxFlex="40"
+                    fxFlex.lt-sm="80" fxLayout="column">
+                    <input class="categoryInput" formControlName="newCategory" [required]="true" fxFlex matInput
+                        placeholder="New Category" (keyup)="NewCategory.value"
+                        (keyup.enter)="addCategory(NewCategory, Type.value)" />
                     <button type="button" mat-mini-fab class="btnNewType" (click)="addCategory(NewCategory, Type.value)"
-                        [disabled]="NewCategory.invalid">
+                        [disabled]="NewCategoryGroup.invalid">
                         Add
                     </button>
                     <mat-error *ngIf="NewCategory.hasError('required')">
                         Enter a value Or select a predefined Category.
                     </mat-error>
-                    <mat-error *ngIf="NewCategory.hasError('uniqueCategory')">
-                        {{NewCategory.value | uppercase}} already exists in {{Type.value | titlecase}}.
+                    <mat-error *ngIf="NewCategoryGroup.hasError('notUniqueCategory')">
+                        {{NewCategory.value | uppercase}} already exists in Type {{Type.value | titlecase}}.
                     </mat-error>
                 </mat-form-field>
+                <p *ngIf="NewCategoryGroup.hasError('notUniqueCategory')" class="categoryAlert">
+                    {{NewCategory.value | uppercase}} already exists in Type {{Type.value | titlecase}}.
+                </p>
+                <div *ngIf="NewCategory.hasError('notUniqueCategory')">
+                    {{NewCategory.value | uppercase}} already exists in Type {{Type.value | titlecase}}.
+                </div>
             </ng-conainer>
         </ng-conainer>
     </ng-container>

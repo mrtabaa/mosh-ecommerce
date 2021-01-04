@@ -82,19 +82,19 @@
                 </mat-form-field>
 
                 <!-- NewCategory input -->
-                <mat-form-field *ngIf="Category.value === 'NewCategory'" fxFlex="40" fxFlex.lt-sm="80"
+                <mat-form-field *ngIf="Category.value === 'newCategory'" fxFlex="40" fxFlex.lt-sm="80"
                     fxLayout="column">
                     <input formControlName="newCategory" [required]="true" fxFlex matInput placeholder="New Category"
-                        (keyup)="NewCategory.value" (keyup.enter)="addCategory(NewCategory.value, Type.value)" />
-                    <button type="button" mat-mini-fab class="btnNewType"
-                        (click)="addCategory(NewCategory.value, Type.value)" [disabled]="NewCategory.invalid">
+                        (keyup)="NewCategory.value" (keyup.enter)="addCategory(NewCategory, Type.value)" />
+                    <button type="button" mat-mini-fab class="btnNewType" (click)="addCategory(NewCategory, Type.value)"
+                        [disabled]="NewCategory.invalid">
                         Add
                     </button>
                     <mat-error *ngIf="NewCategory.hasError('required')">
                         Enter a value Or select a predefined Category.
                     </mat-error>
                     <mat-error *ngIf="NewCategory.hasError('uniqueCategory')">
-                        Enter a value Or select a predefined Category.
+                        {{NewCategory.value | uppercase}} already exists in {{Type.value | titlecase}}.
                     </mat-error>
                 </mat-form-field>
             </ng-conainer>

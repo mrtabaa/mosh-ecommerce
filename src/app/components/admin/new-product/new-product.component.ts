@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Product } from 'src/app/models/product.model';
-import { NewProductService } from 'src/app/services/newProduct.service';
+import { NewProductService } from 'src/app/services/new-product.service';
+import { TypeCategoryService } from 'src/app/services/type-category.service';
 import { TypeCategoryValidators } from './validators/type-category.validator';
 
 @Component({
@@ -15,13 +16,16 @@ export class NewProductComponent implements OnInit {
   types: string[];
   categories: string[];
 
-  constructor(private newProductService: NewProductService, private fb: FormBuilder) {
-    this.types = this.newProductService.typesList; // get types
+  constructor(
+    private typeCategoryService: TypeCategoryService,
+    private newProductService: NewProductService,
+    private fb: FormBuilder) {
+    this.types = this.typeCategoryService.typesList; // get types
   }
 
   getCategories(itemType: string): string[] {
     this.Category.setValue(null);
-    return this.categories = this.newProductService.getCategory(itemType);
+    return this.categories = this.typeCategoryService.getCategory(itemType);
   }
 
   ngOnInit(): void {
@@ -45,7 +49,7 @@ export class NewProductComponent implements OnInit {
 
   addType(type: HTMLInputElement): void {
     if (this.NewType.valid) {
-      this.newProductService.addType(type.value); // add Type if it doesn't exist
+      this.typeCategoryService.addType(type.value); // add Type if it doesn't exist
       this.AddedType.setValue(type.value);
       this.Type.setValue(type.value);
       this.NewType.setValue('');
@@ -53,8 +57,9 @@ export class NewProductComponent implements OnInit {
     }
   }
 
-  addCategory(newCategoryOnKeyup: HTMLInputElement, selectedType: string): void {
-    this.newProductService.addCategory(newCategoryOnKeyup.value, selectedType);
+  addCategory(newCategoryInput: HTMLInputElement, selectedType: string): void {
+    this.typeCategoryService.addCategory(newCategoryInput.value, selectedType)
+      .then(catList => this.categories = catList);
   }
 
   onSubmit($event: Product): void {

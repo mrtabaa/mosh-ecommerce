@@ -16,18 +16,13 @@
 
             <!-- TYPE -->
             <ng-container id="type">
-                <mat-form-field>
+                <mat-form-field *ngIf="Type.value !== 'newType'">
                     <mat-select formControlName="type" [required]="true" placeholder="Type">
                         <!-- newType option -->
                         <mat-option value="newType">
                             <mat-icon>add_circle_outline</mat-icon>
                             New Type
                         </mat-option>
-                        <!-- MUST USE mat-select-trigger TO SHOW mat-icon -->
-                        <mat-select-trigger *ngIf="Type.value === 'newType'">
-                            <mat-icon>add_circle_outline</mat-icon>
-                            Fill out New Type field.
-                        </mat-select-trigger>
 
                         <!-- PRINT TYPES -->
                         <mat-option *ngFor="let item of types" [value]="item" (click)="getCategories(item)">
@@ -37,9 +32,9 @@
                     <mat-error *ngIf="Type.hasError('required')">Please select a Type or create one.</mat-error>
                 </mat-form-field>
                 <!-- input -->
-                <mat-form-field *ngIf="Type.value === 'newType'">
+                <mat-form-field *ngIf="Type.value === 'newType'" fxLayout="column" fxLayoutAlign="start stretch">
                     <input formControlName="newType" [required]="true" matInput placeholder="New Type"
-                        (keyup.enter)="addType(NewType)" />
+                        (keyup.enter)="addType(NewType)" fxFlex="100" />
                     <button type="button" mat-mini-fab class="btnNewType" (click)="addType(NewType)"
                         [disabled]="NewType.invalid">Add
                     </button>
@@ -54,7 +49,7 @@
 
             <!-- CATEGORY -->
             <ng-container id="category" *ngIf="Type.value !== 'newType'">
-                <mat-form-field>
+                <mat-form-field *ngIf="Category.value !== 'newCategory'">
                     <mat-select formControlName="category" [required]="true" placeholder="Category"
                         (click)="Category.markAsTouched();" [errorStateMatcher]="clickErrorMatcher">
                         <!-- NewCategory option -->
@@ -62,10 +57,6 @@
                             <mat-icon>add_circle_outline</mat-icon>
                             New Category
                         </mat-option>
-                        <mat-select-trigger *ngIf="Category.value === 'newCategory'">
-                            <mat-icon>add_circle_outline</mat-icon>
-                            Fill out New Category field.
-                        </mat-select-trigger>
 
                         <!-- PRINT CATEGORIES -->
                         <ng-container *ngFor="let item of categories;">
@@ -82,10 +73,11 @@
                 </mat-form-field>
 
                 <!-- NewCategory input -->
-                <mat-form-field formGroupName="newCategoryGroup" *ngIf="Category.value === 'newCategory'">
-                    <input class="categoryInput" formControlName="newCategory" [required]="true" matInput
-                        placeholder="New Category" (keyup)="NewCategory.value"
-                        (keyup.enter)="addCategory(NewCategory, Type.value)" />
+                <mat-form-field formGroupName="newCategoryGroup" *ngIf="Category.value === 'newCategory'"
+                    fxLayout="column" fxLayoutAlign="start stretch">
+                    <input formControlName="newCategory" [required]="true" (keyup)="NewCategory.value"
+                        (keyup.enter)="addCategory(NewCategory, Type.value)" matInput placeholder="New Category"
+                        class="categoryInput" fxFlex="100" />
                     <button type="button" mat-mini-fab class="btnNewType" (click)="addCategory(NewCategory, Type.value)"
                         [disabled]="NewCategoryGroup.invalid">
                         Add
@@ -128,7 +120,7 @@
                 <mat-error *ngIf="ImageUrl.hasError('required')">Image URL field is required.</mat-error>
             </mat-form-field>
         </ng-container>
-        <!-- <p>{{ form.value | json }}</p> -->
+        <p>{{ form.value | json }}</p>
         <button id="submit" mat-raised-button color="primary" [disabled]="form.invalid || Category.pristine"
             fxFlexAlign="center" class="btnSave">Save
         </button>

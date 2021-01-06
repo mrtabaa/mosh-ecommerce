@@ -35,6 +35,6 @@ export class NewProductValidators {
         const type = group.get('type');
         const category = group.get('category');
 
-        return category && type.invalid ? { noTypeSelected: true } : null;
+        return category && type.invalid ? { noPrerequisiteSelected: true } : null;
     }
 }

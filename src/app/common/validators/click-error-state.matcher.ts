@@ -3,6 +3,9 @@ import { ErrorStateMatcher } from '@angular/material/core';
 
 export class ClickErrorStateMatcher implements ErrorStateMatcher {
     isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
-        return !!(control.touched && form.hasError('noPrerequisiteSelected'));
+        return !!(
+            (control.touched && form.hasError('noPrerequisiteSelected')) ||
+            (control.touched && control.invalid)
+        );
     }
 }

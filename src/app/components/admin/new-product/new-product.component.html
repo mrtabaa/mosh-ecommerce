@@ -1,24 +1,22 @@
-<form [formGroup]="form" (ngSubmit)="onSubmit(form.value); form.reset();" fxLayout="column">
-    <!-- 1st row -->
+<form [formGroup]="form" (ngSubmit)="onSubmit(form.value); form.reset();" fxLayout="row" fxLayoutAlign="center">
     <!-- TYPE & CATEGORY-->
-    <ng-container id="typeAndCategory">
-        <!-- NEW TYPE/CATEGORY WARNINGS -->
-        <ng-container *ngIf="(AddedType || AddedCategory)">
-            <!-- New Type -->
-            <p *ngIf="AddedType.value" class="newItemAdded" fxFlex="40" fxFlex.lt-sm="80" fxLayoutAlign="center center">
-                {{AddedType.value | titlecase}} added to the Type list.
-            </p>
-            <!-- New Category -->
-            <p *ngIf="AddedCategory.value" class="newItemAdded" fxFlex="40" fxFlex.lt-sm="80"
-                fxLayoutAlign="center center">
-                {{AddedCategory.value | titlecase}} added to the {{Type.value | titlecase}}'s category.
-            </p>
-        </ng-container>
+    <div fxLayout="column" fxFlex="80" fxFlex.gt-xs="40">
+        <ng-container id="typeAndCategory">
+            <!-- WARNINGS: NEW TYPE/CATEGORY -->
+            <div *ngIf="(AddedType || AddedCategory)">
+                <!-- New Type -->
+                <p *ngIf="AddedType.value" class="newItemAdded">
+                    {{AddedType.value | titlecase}} added to the Type list.
+                </p>
+                <!-- New Category -->
+                <p *ngIf="AddedCategory.value" class="newItemAdded">
+                    {{AddedCategory.value | titlecase}} added to the {{Type.value | titlecase}}'s category.
+                </p>
+            </div>
 
-        <ng-conainer fxLayout="row wrap" fxLayoutAlign="space-around center">
             <!-- TYPE -->
             <ng-container id="type">
-                <mat-form-field fxFlex="40" fxFlex.lt-sm="80">
+                <mat-form-field>
                     <mat-select formControlName="type" [required]="true" placeholder="Type">
                         <!-- newType option -->
                         <mat-option value="newType">
@@ -39,8 +37,8 @@
                     <mat-error *ngIf="Type.hasError('required')">Please select a Type or create one.</mat-error>
                 </mat-form-field>
                 <!-- input -->
-                <mat-form-field *ngIf="Type.value === 'newType'" fxFlex="40" fxFlex.lt-sm="80" fxLayout="column">
-                    <input formControlName="newType" [required]="true" fxFlex matInput placeholder="New Type"
+                <mat-form-field *ngIf="Type.value === 'newType'">
+                    <input formControlName="newType" [required]="true" matInput placeholder="New Type"
                         (keyup.enter)="addType(NewType)" />
                     <button type="button" mat-mini-fab class="btnNewType" (click)="addType(NewType)"
                         [disabled]="NewType.invalid">Add
@@ -55,9 +53,10 @@
             </ng-container>
 
             <!-- CATEGORY -->
-            <ng-conainer id="category" fxFlex="40" fxFlex.lt-sm="80" fxLayout="column" *ngIf="Type.value !== 'newType'">
+            <ng-container id="category" *ngIf="Type.value !== 'newType'">
                 <mat-form-field>
-                    <mat-select formControlName="category" [required]="true" placeholder="Category">
+                    <mat-select formControlName="category" [required]="true" placeholder="Category"
+                        (click)="printError()">
                         <!-- NewCategory option -->
                         <mat-option value="newCategory" *ngIf="Type.valid">
                             <mat-icon>add_circle_outline</mat-icon>
@@ -78,13 +77,11 @@
                     <mat-error *ngIf="Category.hasError('required') && Type.valid">
                         Please select a Category or create one.
                     </mat-error>
-                    <mat-error *ngIf="Type.invalid">Select a Type first.</mat-error>
                 </mat-form-field>
 
                 <!-- NewCategory input -->
-                <mat-form-field formGroupName="newCategoryGroup" *ngIf="Category.value === 'newCategory'" fxFlex="40"
-                    fxFlex.lt-sm="80" fxLayout="column">
-                    <input class="categoryInput" formControlName="newCategory" [required]="true" fxFlex matInput
+                <mat-form-field formGroupName="newCategoryGroup" *ngIf="Category.value === 'newCategory'">
+                    <input class="categoryInput" formControlName="newCategory" [required]="true" matInput
                         placeholder="New Category" (keyup)="NewCategory.value"
                         (keyup.enter)="addCategory(NewCategory, Type.value)" />
                     <button type="button" mat-mini-fab class="btnNewType" (click)="addCategory(NewCategory, Type.value)"
@@ -101,12 +98,8 @@
                 <p *ngIf="NewCategoryGroup.hasError('notUniqueCategory')" class="categoryAlert">
                     {{NewCategory.value | uppercase}} already exists in Type {{Type.value | titlecase}}.
                 </p>
-                <div *ngIf="NewCategory.hasError('notUniqueCategory')">
-                    {{NewCategory.value | uppercase}} already exists in Type {{Type.value | titlecase}}.
-                </div>
-            </ng-conainer>
-        </ng-conainer>
-    </ng-container>
+            </ng-container>
+        </ng-container>
 
 
 
@@ -114,28 +107,28 @@
 
 
 
-    <!-- 2nd row -->
-    <div fxLayout="row wrap" fxLayoutAlign="space-around center">
-        <!-- TITLE -->
-        <mat-form-field fxFlex="40" fxFlex.lt-sm="80">
-            <input formControlName="title" [required]="true" matInput placeholder="Title">
-            <mat-error *ngIf="Title.hasError('required')">Title field is required.</mat-error>
-        </mat-form-field>
-        <!-- PRICE -->
-        <mat-form-field fxFlex="40" fxFlex.lt-sm="80">
-            <input formControlName="price" [required]="true" matInput placeholder="Price">
-            <span matPrefix>$&nbsp;</span>
-            <mat-error *ngIf="Price.hasError('required')">Price field is required.</mat-error>
-        </mat-form-field>
-        <!-- 3rd row -->
-        <!-- IMAGEURL -->
-        <mat-form-field fxFlex="80">
-            <input formControlName="imageUrl" [required]="true" matInput placeholder="Image URL">
-            <mat-error *ngIf="ImageUrl.hasError('required')">Image URL field is required.</mat-error>
-        </mat-form-field>
+        <ng-container id="titlePriceImage">
+            <!-- TITLE -->
+            <mat-form-field>
+                <input formControlName="title" [required]="true" matInput placeholder="Title">
+                <mat-error *ngIf="Title.hasError('required')">Title field is required.</mat-error>
+            </mat-form-field>
+            <!-- PRICE -->
+            <mat-form-field>
+                <input formControlName="price" [required]="true" matInput placeholder="Price">
+                <span matPrefix>$&nbsp;</span>
+                <mat-error *ngIf="Price.hasError('required')">Price field is required.</mat-error>
+            </mat-form-field>
+            <!-- 3rd row -->
+            <!-- IMAGEURL -->
+            <mat-form-field fxFlex="80">
+                <input formControlName="imageUrl" [required]="true" matInput placeholder="Image URL">
+                <mat-error *ngIf="ImageUrl.hasError('required')">Image URL field is required.</mat-error>
+            </mat-form-field>
+        </ng-container>
+        <!-- <p>{{ form.value | json }}</p> -->
+        <button id="submit" mat-raised-button color="primary" [disabled]="form.invalid || Category.pristine"
+            fxFlexAlign="center" class="btnSave">Save
+        </button>
     </div>
-    <!-- 4rd row -->
-    <p>{{ form.value | json }}</p>
-    <button fxFlexAlign="center" mat-raised-button color="primary" [disabled]="form.invalid || Category.pristine"
-        class="btnSave">Save</button>
 </form>

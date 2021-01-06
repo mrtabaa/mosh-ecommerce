@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { AbstractControl, FormBuilder, FormGroup, ValidationErrors } from '@angular/forms';
+import { ClickErrorStateMatcher } from 'src/app/common/validators/click-error-state.matcher';
 import { Product } from 'src/app/models/product.model';
 import { NewProductService } from 'src/app/services/new-product.service';
 import { TypeCategoryService } from 'src/app/services/type-category.service';
-import { TypeCategoryValidators } from './validators/type-category.validator';
+import { NewProductValidators } from './new-product.validator';
 
 @Component({
   selector: 'app-new-product',
@@ -12,6 +13,7 @@ import { TypeCategoryValidators } from './validators/type-category.validator';
 })
 export class NewProductComponent implements OnInit {
   form: FormGroup;
+  clickErrorMatcher = new ClickErrorStateMatcher();
 
   types: string[];
   categories: string[];
@@ -30,6 +32,10 @@ export class NewProductComponent implements OnInit {
     this.CategoriesCtrl.setValue(this.categories);
   }
 
+  printError(): void {
+    console.log(this.form);
+  }
+
   ngOnInit(): void {
     this.form = this.fb.group({
       type: [],
@@ -39,7 +45,7 @@ export class NewProductComponent implements OnInit {
       imageUrl: [],
 
       newType: ['', {
-        validators: [TypeCategoryValidators.checkUniqueType(this.types)],
+        validators: [NewProductValidators.checkUniqueType(this.types)],
         asyncValidators: [],
         updateOn: 'change'
       }],
@@ -48,12 +54,17 @@ export class NewProductComponent implements OnInit {
         newCategory: [],
         categoriesCtrl: [],
       },
-        { validators: [TypeCategoryValidators.checkUniqueCategory] }
+        { validators: [NewProductValidators.checkUniqueCategory] }
       ),
 
       addedType: [],
       addedCategory: []
-    });
+    },
+      {
+        validators: [NewProductValidators.checkNoTypeSelectedCategory],
+        asyncValidators: [],
+        updateOn: 'change'
+      });
   }
 
   addType(type: HTMLInputElement): void {

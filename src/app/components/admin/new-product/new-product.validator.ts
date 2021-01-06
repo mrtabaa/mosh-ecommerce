@@ -1,6 +1,6 @@
 import { AbstractControl, ValidationErrors } from '@angular/forms';
 
-export class TypeCategoryValidators {
+export class NewProductValidators {
     categoryList: string[];
 
     public set Categories(categories: string[]) {
@@ -23,10 +23,18 @@ export class TypeCategoryValidators {
         const categories = group.get('categoriesCtrl').value as string[];
 
         if (categories && newCategory) {
-            if (categories.includes(newCategory)) {
+            if (categories.includes(newCategory.toLowerCase())) {
                 return { notUniqueCategory: true };
             }
         }
         return null;
+    }
+
+    // If Category is clicked and Type is not selected
+    static checkNoTypeSelectedCategory(group: AbstractControl): ValidationErrors | null {
+        const type = group.get('type');
+        const category = group.get('category');
+
+        return category && type.invalid ? { noTypeSelected: true } : null;
     }
 }

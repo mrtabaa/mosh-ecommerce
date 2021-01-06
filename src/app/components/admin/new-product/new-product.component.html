@@ -56,7 +56,7 @@
             <ng-container id="category" *ngIf="Type.value !== 'newType'">
                 <mat-form-field>
                     <mat-select formControlName="category" [required]="true" placeholder="Category"
-                        (click)="printError()">
+                        (click)="Category.markAsTouched();" [errorStateMatcher]="clickErrorMatcher">
                         <!-- NewCategory option -->
                         <mat-option value="newCategory" *ngIf="Type.valid">
                             <mat-icon>add_circle_outline</mat-icon>
@@ -76,6 +76,8 @@
                     </mat-select>
                     <mat-error *ngIf="Category.hasError('required') && Type.valid">
                         Please select a Category or create one.
+                    </mat-error>
+                    <mat-error *ngIf="form.hasError('noTypeSelected')">Select a Type first.
                     </mat-error>
                 </mat-form-field>
 

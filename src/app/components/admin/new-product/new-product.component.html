@@ -83,9 +83,12 @@
                     <input formControlName="newCategory" [required]="true" (keyup)="NewCategory.value"
                         (keyup.enter)="addCategory(NewCategory, Type.value)" matInput placeholder="New Category"
                         class="categoryInput" fxFlex="100" />
-                    <button type="button" mat-mini-fab class="btnNewType" (click)="addCategory(NewCategory, Type.value)"
-                        [disabled]="NewCategoryGroup.invalid">
+                    <button type="button" mat-mini-fab (click)="addCategory(NewCategory, Type.value)"
+                        [disabled]="NewCategoryGroup.invalid" color="primary">
                         Add
+                    </button>
+                    <button type="button" mat-mini-fab (click)="Category.setValue(null)" color="accent">
+                        X
                     </button>
                     <mat-error *ngIf="NewCategory.hasError('required')">
                         Enter a value Or select a predefined Category.

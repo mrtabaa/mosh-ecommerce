@@ -34,9 +34,14 @@
                 <!-- input -->
                 <mat-form-field *ngIf="Type.value === 'newType'" fxLayout="column" fxLayoutAlign="start stretch">
                     <input formControlName="newType" [required]="true" matInput placeholder="New Type"
-                        (keyup.enter)="addType(NewType)" fxFlex="100" />
-                    <button type="button" mat-mini-fab class="btnNewType" (click)="addType(NewType)"
-                        [disabled]="NewType.invalid">Add
+                        (keyup.enter)="addType(NewType)" fxFlex="100"
+                        [cdkTrapFocusAutoCapture]="Type.value === 'newType'"
+                        [cdkTrapFocus]="Type.value === 'newType'" />
+                    <button type="button" mat-mini-fab (click)="addType(NewType)" [disabled]="NewType.invalid"
+                        color="primary">Add
+                    </button>
+                    <button type="button" mat-mini-fab (click)="Type.setValue(null)" color="accent">
+                        X
                     </button>
                     <mat-error *ngIf="NewType.hasError('required')">
                         Enter a value Or select a predefined Type.

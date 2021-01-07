@@ -46,3 +46,4 @@ testem.log
 Thumbs.db
 .vscode/launch.json
 .firebase/hosting.ZGlzdFxtb3NoLWVjb21tZXJjZQ.cache
+src/app/components/admin/new-product/new-product.component.css.map

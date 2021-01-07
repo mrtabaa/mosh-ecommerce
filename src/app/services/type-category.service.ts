@@ -27,6 +27,7 @@ export class TypeCategoryService {
 
   getCategory(selectedType: string): string[] {
     this.categoryList = [];
+
     this.db.list<string>('/typeAndCategory/' + selectedType.toLowerCase()).valueChanges()
       .pipe(take(1))
       .subscribe(obj => {
@@ -42,20 +43,24 @@ export class TypeCategoryService {
   async addType(newType: string): Promise<void> {
     newType = newType.toLowerCase();
 
-    await this.db.list<string>('/typeAndCategory/' + newType)
-      .push('');
+    if (this.typesList && !this.typesList.includes(newType)) {
+      await this.db.list<string>('/typeAndCategory/' + newType)
+        .push('');
 
-    this.typesList.push(newType);
+      this.typesList.push(newType);
+    }
   }
 
   async addCategory(newCategory: string, selectedType: string): Promise<string[]> {
     newCategory = newCategory.toLowerCase();
     selectedType = selectedType.toLowerCase();
 
-    await this.db.list<string>('/typeAndCategory/' + selectedType)
-      .push(newCategory);
+    if (this.categoryList && !this.categoryList.includes(newCategory)) {
+      await this.db.list<string>('/typeAndCategory/' + selectedType)
+        .push(newCategory);
 
-    this.categoryList.push(newCategory);
+      this.categoryList.push(newCategory);
+    }
 
     return this.categoryList;
   }

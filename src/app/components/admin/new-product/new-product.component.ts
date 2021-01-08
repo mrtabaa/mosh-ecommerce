@@ -1,10 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, ValidationErrors } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
 import { ClickErrorStateMatcher } from 'src/app/common/validators/click-error-state.matcher';
 import { Product } from 'src/app/models/product.model';
 import { NewProductService } from 'src/app/services/new-product.service';
 import { TypeCategoryService } from 'src/app/services/type-category.service';
 import { NewProductValidators } from './new-product.validator';
+import { NewCategoryErrorStateMatcher } from './new-product-error-state.matcher';
 
 @Component({
   selector: 'app-new-product',
@@ -14,6 +15,7 @@ import { NewProductValidators } from './new-product.validator';
 export class NewProductComponent implements OnInit {
   form: FormGroup;
   clickErrorMatcher = new ClickErrorStateMatcher();
+  categoryExistErrorStateMatcher = new NewCategoryErrorStateMatcher();
 
   types: string[];
   categories: string[];
@@ -25,33 +27,30 @@ export class NewProductComponent implements OnInit {
     this.types = this.typeCategoryService.typesList; // get types
   }
 
-  getCategories(itemType?: string): void {
-    this.Category.setValue(null);
-    this.categories = this.typeCategoryService.getCategory(itemType);
-
-    this.CategoriesCtrl.setValue(this.categories);
-  }
-
   printError(): void {
     console.log(this.form);
   }
 
   ngOnInit(): void {
     this.form = this.fb.group({
-      type: [],
-      category: [],
-      title: [],
-      price: [],
-      imageUrl: [],
+      type: ['', Validators.required],
+      category: ['', Validators.required],
+      title: ['', Validators.required],
+      price: ['', Validators.required],
+      imageUrl: ['', Validators.required],
 
       newType: ['', {
-        validators: [NewProductValidators.checkUniqueType(this.types)],
+        validators: [
+          Validators.required,
+          NewProductValidators.checkUniqueType(this.types),
+          NewProductValidators.checkNewTypeCategoryAdded,
+        ],
         asyncValidators: [],
         updateOn: 'change'
       }],
 
       newCategoryGroup: this.fb.group({
-        newCategory: [],
+        newCategory: ['', [Validators.required, NewProductValidators.checkNewTypeCategoryAdded]],
         categoriesCtrl: [],
       },
         { validators: [NewProductValidators.checkUniqueCategory] }
@@ -61,14 +60,24 @@ export class NewProductComponent implements OnInit {
       addedCategory: []
     },
       {
-        validators: [NewProductValidators.checkNoTypeSelectedCategory],
+        validators: [
+          NewProductValidators.validateForm,
+          NewProductValidators.checkNoTypeSelectedCategory
+        ],
         asyncValidators: [],
         updateOn: 'change'
       });
   }
 
+  getCategories(itemType?: string): void {
+    this.Category.setValue(null);
+    this.categories = this.typeCategoryService.getCategory(itemType);
+
+    this.CategoriesCtrl.setValue(this.categories);
+  }
+
   addType(type: HTMLInputElement): void {
-    if (this.NewType.valid) {
+    if (this.NewType.hasError('newItemNotAdded') && !this.NewType.hasError('uniqueType')) {
       this.typeCategoryService.addType(type.value); // add Type if it doesn't exist
       this.AddedType.setValue(type.value);
       this.Type.setValue(type.value);
@@ -78,10 +87,23 @@ export class NewProductComponent implements OnInit {
   }
 
   addCategory(newCategoryInput: HTMLInputElement, selectedType: string): void {
-    if (this.NewCategoryGroup.valid) {
+    if (this.NewCategory.hasError('newItemNotAdded') && !this.NewCategoryGroup.hasError('uniqueCategory')) {
+      this.categories = [];
       this.typeCategoryService.addCategory(newCategoryInput.value, selectedType)
-        .then(catList => this.categories = catList);
+        .then(catList => {
+          this.CategoriesCtrl.setValue(catList);
+          this.categories = catList;
+        });
+
+      this.Category.setValue(this.NewCategory.value);
+      this.NewCategory.setValue(null);
+      this.NewCategory.setErrors(null);
+      this.NewCategoryGroup.setErrors(null);
     }
+  }
+
+  resetCategory(): void {
+    this.categories = [];
   }
 
   onSubmit($event: Product): void {
@@ -124,14 +146,5 @@ export class NewProductComponent implements OnInit {
   }
   get AddedCategory(): AbstractControl {
     return this.form.get('addedCategory');
-  }
-
-  validateCategory(control: AbstractControl): ValidationErrors | null {
-    if (this.categories && this.categories.includes(control.value)) {
-      console.log(this.categories);
-      console.log(control.value);
-      return { uniqueCategory: true };
-    }
-    return null;
   }
 }

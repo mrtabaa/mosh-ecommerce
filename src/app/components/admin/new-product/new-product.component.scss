@@ -1,12 +1,24 @@
 form{
     margin-top: 10%;
+    padding: 0 30px;
+
+    .addWarning{
+        color: #283593;
+    }
+    .btnSave{
+        margin-top: 5%;
+        width: 30%;
+    }
 }
-.btnSave{
-    margin-top: 5%;
-    width: 30%;
-}
+
 .newItemAdded{
     background-color: #FCE4EC;
     color: #283593;
     padding: 1em;
+}
+
+#type{
+    .newTypeCategoryInput{
+        margin: 1em 0;
+    }
 }

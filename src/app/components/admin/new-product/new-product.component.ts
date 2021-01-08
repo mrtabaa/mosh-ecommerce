@@ -76,11 +76,11 @@ export class NewProductComponent implements OnInit {
     this.CategoriesCtrl.setValue(this.categories);
   }
 
-  addType(type: HTMLInputElement): void {
+  addType(inputType: HTMLInputElement): void {
     if (this.NewType.hasError('newItemNotAdded') && !this.NewType.hasError('uniqueType')) {
-      this.typeCategoryService.addType(type.value); // add Type if it doesn't exist
-      this.AddedType.setValue(type.value);
-      this.Type.setValue(type.value);
+      this.typeCategoryService.addType(inputType.value); // add Type if it doesn't exist
+      this.AddedType.setValue(inputType.value);
+      this.Type.setValue(inputType.value);
       this.NewType.setValue('');
       this.NewType.markAsPristine();
     }

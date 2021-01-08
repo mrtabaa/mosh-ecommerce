@@ -18,7 +18,11 @@ export class NewProductValidators {
     // check Type uniqueness
     static checkUniqueType(types: string[]): ValidationErrors | null {
         return (control: AbstractControl) => {
-            if (types && types.includes((control.value as string).toLowerCase())) {
+            let type: string;
+            if (control.value) {
+                type = (control.value as string).toLowerCase();
+            }
+            if (types && types.includes(type)) {
                 return { uniqueType: true };
             }
             return null;

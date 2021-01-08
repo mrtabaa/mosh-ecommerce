@@ -1,8 +1,9 @@
+<!-- used region folding for VS Code by maptz -->
 <form [formGroup]="form" (ngSubmit)="onSubmit(form.value); form.reset();" fxLayout="row" fxLayoutAlign="center">
-    <!-- TYPE & CATEGORY-->
     <div fxLayout="column" fxFlex="0 1 380px">
+
         <ng-container id="typeAndCategory">
-            <!-- WARNINGS: NEW TYPE/CATEGORY -->
+            <!-- #region WARNINGS: NEW TYPE/CATEGORY -->
             <div *ngIf="(AddedType || AddedCategory)">
                 <!-- New Type -->
                 <p *ngIf="AddedType.value" class="newItemAdded">
@@ -13,9 +14,11 @@
                     {{AddedCategory.value | titlecase}} added to the {{Type.value | titlecase}}'s category.
                 </p>
             </div>
+            <!-- #endregion -->
 
-            <!-- TYPE -->
+            <!-- #region TYPE -->
             <ng-container id="type" class="newTypeCategoryInput">
+                <!-- #region options -->
                 <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="3px">
                     <mat-form-field *ngIf="Type.value !== 'newType'" fxFlex="95">
                         <mat-select formControlName="type" [required]="true" placeholder="Type">
@@ -32,24 +35,28 @@
                         </mat-select>
                         <mat-error *ngIf="Type.hasError('required')">Please select a Type or create one.</mat-error>
                     </mat-form-field>
+                    <!-- success icon -->
                     <mat-icon *ngIf="Type.valid && Type.value !=='newType'" color="primary">
                         check_circle
                     </mat-icon>
                 </div>
-                <!-- input -->
+                <!-- #endregion -->
+                <!-- #region newType -->
                 <mat-form-field class="newTypeCategoryInput" *ngIf="Type.value === 'newType'" fxLayout="column"
                     fxLayoutAlign="start stretch">
-                    <input formControlName="newType" [required]="true" matInput placeholder="New Type"
-                        (keyup.enter)="addType(NewType)" fxFlex="100"
-                        [cdkTrapFocusAutoCapture]="Type.value === 'newType'"
+                    <input #newTypeInput formControlName="newType" [required]="true" matInput placeholder="New Type"
+                        (keyup.enter)="addType()" fxFlex="100" [cdkTrapFocusAutoCapture]="Type.value === 'newType'"
                         [cdkTrapFocus]="Type.value === 'newType'" />
-                    <button type="button" mat-mini-fab (click)="addType(NewType)"
+                    <!-- #region buttons -->
+                    <button type="button" mat-mini-fab (click)="addType()"
                         [disabled]="!NewType.hasError('newItemNotAdded') || NewType.hasError('uniqueType')"
                         color="primary">Add
                     </button>
                     <button type="button" mat-mini-fab (click)="Type.setValue(null)" color="accent">
                         X
                     </button>
+                    <!-- #endregion -->
+                    <!-- #region errors -->
                     <mat-error *ngIf="NewType.hasError('required')">
                         Enter a value Or cancel.
                     </mat-error>
@@ -60,16 +67,20 @@
                         class="addWarning">
                         Hit <b>Enter</b>/<b>Add</b> for New Type or <b>X</b> to Cancel.
                     </mat-error>
+                    <!-- #endregion -->
                 </mat-form-field>
+                <!-- #endregion -->
             </ng-container>
+            <!-- #endregion -->
 
-            <!-- CATEGORY -->
+            <!-- #region CATEGORY -->
             <ng-container id="category" *ngIf="Type.value !== 'newType'" class="newTypeCategoryInput">
+                <!-- #region options -->
                 <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="3px">
                     <mat-form-field *ngIf="Category.value !== 'newCategory'" fxFlex="95">
                         <mat-select formControlName="category" [required]="true" placeholder="Category"
                             (click)="Category.markAsTouched();" [errorStateMatcher]="clickErrorMatcher">
-                            <!-- NewCategory option -->
+                            <!-- newCategory option -->
                             <mat-option value="newCategory" *ngIf="Type.valid">
                                 <mat-icon>add_circle_outline</mat-icon>
                                 New Category
@@ -88,19 +99,21 @@
                         <mat-error *ngIf="form.hasError('noPrerequisiteSelected')">Select a Type first.
                         </mat-error>
                     </mat-form-field>
+                    <!-- success icon -->
                     <mat-icon *ngIf="Category.valid && Category.value !=='newCategory'" color="primary">
                         check_circle
                     </mat-icon>
                 </div>
-
-                <!-- NewCategory input -->
+                <!-- #endregion -->
+                <!-- #region newCategory -->
                 <mat-form-field formGroupName="newCategoryGroup" *ngIf="Category.value === 'newCategory'"
                     fxLayout="column" fxLayoutAlign="start stretch">
                     <input formControlName="newCategory" [required]="true" (keyup)="NewCategory.value"
-                        (keyup.enter)="addCategory(NewCategory, Type.value)" matInput placeholder="New Category"
+                        (keyup.enter)="addCategory()" matInput placeholder="New Category"
                         [cdkTrapFocusAutoCapture]="Category.value === 'newCategory'"
                         [cdkTrapFocus]="Category.value === 'newCategory'" fxFlex="100" />
-                    <button type="button" mat-mini-fab (click)="addCategory(NewCategory, Type.value)"
+                    <!-- #region buttons -->
+                    <button type="button" mat-mini-fab (click)="addCategory()"
                         [disabled]="!NewCategory.hasError('newItemNotAdded') || NewCategoryGroup.hasError('uniqueCategory')"
                         color="primary">
                         Add
@@ -108,6 +121,8 @@
                     <button type="button" mat-mini-fab (click)="Category.setValue(null)" color="accent">
                         X
                     </button>
+                    <!-- #endregion -->
+                    <!-- #region errors -->
                     <mat-error *ngIf="NewCategory.hasError('required')">
                         Enter a value Or cancel.
                     </mat-error>
@@ -119,51 +134,61 @@
                         class="addWarning">
                         Hit <b>Enter</b>/<b>Add</b> for New Category or <b>X</b> to Cancel.
                     </mat-error>
+                    <!-- #endregion -->
                 </mat-form-field>
+                <!-- #endregion -->
             </ng-container>
+            <!-- #endregion -->
         </ng-container>
 
-        <!-- <div *ngIf="!(Type.value && Type.value === 'newType' || Category && Category.value ==='newCategory')"> -->
-        <ng-container id="titlePriceImage">
-            <!-- TITLE -->
-            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="3px">
-                <mat-form-field fxFlex="95">
-                    <input formControlName="title" [required]="true" matInput placeholder="Title">
-                    <mat-error *ngIf="Title.hasError('required')">Title field is required.</mat-error>
-                </mat-form-field>
-                <mat-icon *ngIf="Title.valid" color="primary">
-                    check_circle
-                </mat-icon>
-            </div>
-            <!-- PRICE -->
-            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="3px">
-                <mat-form-field fxFlex="95">
-                    <input formControlName="price" [required]="true" matInput placeholder="Price">
-                    <span matPrefix>$&nbsp;</span>
-                    <mat-error *ngIf="Price.hasError('required')">Price field is required.</mat-error>
-                </mat-form-field>
-                <mat-icon *ngIf="Price.valid" color="primary">
-                    check_circle
-                </mat-icon>
-            </div>
-            <!-- 3rd row -->
-            <!-- IMAGEURL -->
-            <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="3px">
-                <mat-form-field fxFlex="95">
-                    <input formControlName="imageUrl" [required]="true" matInput placeholder="Image URL"
-                        (click)="printError()">
-                    <mat-error *ngIf="ImageUrl.hasError('required')">Image URL field is required.</mat-error>
-                </mat-form-field>
-                <mat-icon *ngIf="ImageUrl.valid" color="primary">
-                    check_circle
-                </mat-icon>
-            </div>
-        </ng-container>
-        <!-- <p>{{ form.value | json }}</p> -->
-        <button id="submit" mat-raised-button color="primary" [disabled]="form.hasError('invalidForm')"
-            fxFlexAlign="center" class="btnSave">
-            Save
-        </button>
-        <!-- </div> -->
+        <!-- #region inputs with SubmitBtn -->
+        <div *ngIf="!(Type && Type.value && Type.value === 'newType' || Category && Category.value ==='newCategory')"
+            fxLayout="column">
+            <ng-container id="titlePriceImage">
+                <!-- #region TITLE -->
+                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="3px">
+                    <mat-form-field fxFlex="95">
+                        <input formControlName="title" [required]="true" matInput placeholder="Title">
+                        <mat-error *ngIf="Title.hasError('required')">Title field is required.</mat-error>
+                    </mat-form-field>
+                    <mat-icon *ngIf="Title.valid" color="primary">
+                        check_circle
+                    </mat-icon>
+                </div>
+                <!-- #endregion -->
+                <!-- #region PRICE -->
+                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="3px">
+                    <mat-form-field fxFlex="95">
+                        <input formControlName="price" [required]="true" matInput placeholder="Price">
+                        <span matPrefix>$&nbsp;</span>
+                        <mat-error *ngIf="Price.hasError('required')">Price field is required.</mat-error>
+                    </mat-form-field>
+                    <mat-icon *ngIf="Price.valid" color="primary">
+                        check_circle
+                    </mat-icon>
+                </div>
+                <!-- #endregion -->
+                <!-- #region IMAGEURL -->
+                <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="3px">
+                    <mat-form-field fxFlex="95">
+                        <input formControlName="imageUrl" [required]="true" matInput placeholder="Image URL"
+                            (click)="printError()">
+                        <mat-error *ngIf="ImageUrl.hasError('required')">Image URL field is required.</mat-error>
+                    </mat-form-field>
+                    <mat-icon *ngIf="ImageUrl.valid" color="primary">
+                        check_circle
+                    </mat-icon>
+                </div>
+                <!-- #endregion -->
+            </ng-container>
+            <!-- <p>{{ form.value | json }}</p> -->
+            <!-- #region submitBtn -->
+            <button id="submit" mat-raised-button color="primary" [disabled]="form.hasError('invalidForm')"
+                fxFlexAlign="center" class="btnSave">
+                Save
+            </button>
+            <!-- #endregion -->
+        </div>
+        <!-- #endregion -->
     </div>
 </form>

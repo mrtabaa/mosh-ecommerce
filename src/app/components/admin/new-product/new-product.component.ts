@@ -76,20 +76,25 @@ export class NewProductComponent implements OnInit {
     this.CategoriesCtrl.setValue(this.categories);
   }
 
-  addType(inputType: HTMLInputElement): void {
-    if (this.NewType.hasError('newItemNotAdded') && !this.NewType.hasError('uniqueType')) {
-      this.typeCategoryService.addType(inputType.value); // add Type if it doesn't exist
-      this.AddedType.setValue(inputType.value);
-      this.Type.setValue(inputType.value);
+  addType(): void {
+    if (this.NewType.hasError('newItemNotAdded') || !this.NewType.hasError('uniqueType')) {
+      this.typeCategoryService.addType(this.NewType.value); // add Type if it doesn't exist
+      this.AddedType.setValue(this.NewType.value);
+      this.Type.setValue(this.NewType.value);
       this.NewType.setValue('');
       this.NewType.markAsPristine();
     }
   }
 
-  addCategory(newCategoryInput: HTMLInputElement, selectedType: string): void {
+  addTypeEnter(newTypeInput: string): string {
+    console.log(newTypeInput);
+    return null;
+  }
+
+  addCategory(): void {
     if (this.NewCategory.hasError('newItemNotAdded') && !this.NewCategoryGroup.hasError('uniqueCategory')) {
       this.categories = [];
-      this.typeCategoryService.addCategory(newCategoryInput.value, selectedType)
+      this.typeCategoryService.addCategory(this.NewCategory.value, this.Type.value)
         .then(catList => {
           this.CategoriesCtrl.setValue(catList);
           this.categories = catList;

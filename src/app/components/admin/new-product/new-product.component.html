@@ -1,7 +1,7 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit(form.value); form.reset();" fxLayout="row" fxLayoutAlign="center">
     <div fxLayout="column" fxFlex="0 1 380px">
 
-        <ng-container id="typeAndCategory">
+        <div id="typeAndCategory">
             <!-- #region WARNINGS: NEW TYPE/CATEGORY -->
             <div *ngIf="(AddedType || AddedCategory)">
                 <!-- New Type -->
@@ -16,15 +16,18 @@
             <!-- #endregion -->
 
             <!-- #region TYPE -->
-            <ng-container id="type" class="newTypeCategoryInput">
+            <div id="type" class="newTypeCategoryInput">
                 <!-- #region options -->
                 <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="3px">
                     <mat-form-field *ngIf="Type.value !== 'newType'" fxFlex="95">
-                        <mat-select formControlName="type" [required]="true" placeholder="Type">
+                        <mat-select formControlName="type" [required]="true" placeholder="Type" fxLayout="column"
+                            fxLayoutAlign="center center">
                             <!-- newType option -->
-                            <mat-option value="newType" (click)="resetCategory()">
-                                <mat-icon>add_circle_outline</mat-icon>
-                                New Type
+                            <mat-option class="newItemButton">
+                                <button (click)="Type.setValue('newType')" mat-button fxFlex>
+                                    <mat-icon>add_circle_outline</mat-icon>
+                                    New Type
+                                </button>
                             </mat-option>
 
                             <!-- PRINT TYPES -->
@@ -69,7 +72,7 @@
                     <!-- #endregion -->
                 </mat-form-field>
                 <!-- #endregion -->
-            </ng-container>
+            </div>
             <!-- #endregion -->
 
             <!-- #region CATEGORY -->
@@ -78,11 +81,14 @@
                 <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="3px">
                     <mat-form-field *ngIf="Category.value !== 'newCategory'" fxFlex="95">
                         <mat-select formControlName="category" [required]="true" placeholder="Category"
-                            (click)="Category.markAsTouched();" [errorStateMatcher]="clickErrorMatcher">
+                            (click)="Category.markAsTouched();" [errorStateMatcher]="clickErrorMatcher"
+                            fxLayout="column" fxLayoutAlign="center center">
                             <!-- newCategory option -->
-                            <mat-option value="newCategory" *ngIf="Type.valid">
-                                <mat-icon>add_circle_outline</mat-icon>
-                                New Category
+                            <mat-option *ngIf="Type.valid" class="newItemButton">
+                                <button type="button" (click)="Category.setValue('newCategory')" mat-button fxFlex>
+                                    <mat-icon>add_circle_outline</mat-icon>
+                                    New Category
+                                </button>
                             </mat-option>
 
                             <!-- PRINT CATEGORIES -->
@@ -138,7 +144,7 @@
                 <!-- #endregion -->
             </ng-container>
             <!-- #endregion -->
-        </ng-container>
+        </div>
 
         <!-- #region inputs with SubmitBtn -->
         <div *ngIf="!(Type && Type.value && Type.value === 'newType' || Category && Category.value ==='newCategory')"
@@ -180,7 +186,6 @@
                 </div>
                 <!-- #endregion -->
             </ng-container>
-            <!-- <p>{{ form.value | json }}</p> -->
             <!-- #region submitBtn -->
             <button id="submit" mat-raised-button color="primary" [disabled]="form.hasError('invalidForm')"
                 fxFlexAlign="center" class="btnSave">
@@ -191,3 +196,5 @@
         <!-- #endregion -->
     </div>
 </form>
+
+<p>{{ form.value | json }}</p>

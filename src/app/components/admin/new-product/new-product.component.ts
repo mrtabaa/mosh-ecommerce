@@ -6,6 +6,7 @@ import { NewProductService } from 'src/app/services/new-product.service';
 import { TypeCategoryService } from 'src/app/services/type-category.service';
 import { NewProductValidators } from './helpers/new-product.validator';
 import { NewCategoryErrorStateMatcher } from './helpers/new-product-error-state.matcher';
+import { MatSelectChange } from '@angular/material/select';
 
 @Component({
   selector: 'app-new-product',
@@ -66,22 +67,23 @@ export class NewProductComponent implements OnInit {
       });
   }
 
-  getCategories(selectedType: string): void {
-    if (selectedType) {
+  getCategories(selectedType: MatSelectChange): void {
+    if (selectedType.value) {
       this.Category.setValue(null);
-      this.categories = this.typeCategoryService.getCategory(selectedType);
+      this.categories = this.typeCategoryService.getCategory(selectedType.value);
       this.CategoriesCtrl.setValue(this.categories); // for validation
+      console.log(selectedType.source);
     }
   }
 
   addType(): void {
-    console.log(this.NewType.value);
     if (this.NewType.hasError('newItemNotAdded') || !this.NewType.hasError('uniqueType')) {
       this.typeCategoryService.addType(this.NewType.value); // add Type if it doesn't exist
       this.AddedType.setValue(this.NewType.value);
       this.Type.setValue(this.NewType.value);
       this.NewType.setValue('');
       this.NewType.markAsPristine();
+      this.categories = [];
     }
   }
 

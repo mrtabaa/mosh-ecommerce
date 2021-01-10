@@ -20,9 +20,8 @@
                 <!-- #region options -->
                 <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="3px">
                     <mat-form-field *ngIf="Type.value !== 'newType'" fxFlex="95">
-                        <mat-select formControlName="type" [required]="true"
-                            (selectionChange)="getCategories($event.value)" placeholder="Type" fxLayout="column"
-                            fxLayoutAlign="center center">
+                        <mat-select formControlName="type" [required]="true" (selectionChange)="getCategories($event)"
+                            placeholder="Type" fxLayout="column" fxLayoutAlign="center center">
                             <!-- newType option -->
                             <mat-option class="newItemButton">
                                 <button (click)="Type.setValue('newType')" mat-button fxFlex>
@@ -32,8 +31,7 @@
                             </mat-option>
 
                             <!-- PRINT TYPES -->
-                            <mat-option *ngFor="let item of types" [value]="item" (click)="getCategories(item)"
-                                [selectedType]="item">
+                            <mat-option *ngFor="let item of types" [value]="item" [selectedType]="item">
                                 {{item | titlecase}}
                             </mat-option>
                         </mat-select>
@@ -48,9 +46,9 @@
                 <!-- #region newType -->
                 <mat-form-field class="newTypeCategoryInput" *ngIf="Type.value === 'newType'" fxLayout="column"
                     fxLayoutAlign="start stretch">
-                    <input #newTypeInput formControlName="newType" [required]="true" matInput placeholder="New Type"
-                        (keyup.enter)="addType()" fxFlex="100" [cdkTrapFocusAutoCapture]="Type.value === 'newType'"
-                        [cdkTrapFocus]="Type.value === 'newType'" />
+                    <input formControlName="newType" [required]="true" matInput (keydown.enter)="addType()"
+                        placeholder="New Type" [cdkTrapFocusAutoCapture]="Type.value === 'newType'"
+                        [cdkTrapFocus]="Type.value === 'newType'" fxFlex="100" />
                     <!-- #region buttons -->
                     <button type="button" mat-mini-fab (click)="addType()"
                         [disabled]="!NewType.hasError('newItemNotAdded') || NewType.hasError('uniqueType')"
@@ -115,10 +113,9 @@
                 <!-- #region newCategory -->
                 <mat-form-field formGroupName="newCategoryGroup" *ngIf="Category.value === 'newCategory'"
                     fxLayout="column" fxLayoutAlign="start stretch">
-                    <input formControlName="newCategory" [required]="true" (keyup)="NewCategory.value"
-                        (keyup.enter)="addCategory()" matInput placeholder="New Category"
-                        [cdkTrapFocusAutoCapture]="Category.value === 'newCategory'"
-                        [cdkTrapFocus]="Category.value === 'newCategory'" fxFlex="100" />
+                    <input formControlName="newCategory" [required]="true" (keydown.enter)="addCategory()"
+                        placeholder="New Category" [cdkTrapFocusAutoCapture]="Category.value === 'newCategory'"
+                        [cdkTrapFocus]="Category.value === 'newCategory'" matInput fxFlex="100" />
                     <!-- #region buttons -->
                     <button type="button" mat-mini-fab (click)="addCategory()"
                         [disabled]="!NewCategory.hasError('newItemNotAdded') || NewCategoryGroup.hasError('uniqueCategory')"

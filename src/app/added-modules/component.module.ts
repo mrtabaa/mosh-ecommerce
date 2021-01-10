@@ -19,7 +19,6 @@ import { ShoppingCartComponent } from '../components/shopping-cart/shopping-cart
 import { CheckoutComponent } from '../components/checkout/checkout.component';
 import { NoAccessComponent } from '../components/no-access/no-access.component';
 import { NotFoundComponent } from '../components/not-found/not-found.component';
-import { GetCategoriesDirective } from '../components/admin/new-product/helpers/get-categories.directive';
 
 const components = [
   ManageOrdersComponent,
@@ -36,7 +35,7 @@ const components = [
 ];
 
 @NgModule({
-  declarations: [components, GetCategoriesDirective],
+  declarations: [components],
   imports: [
     CommonModule,
     AppRoutingModule,
@@ -47,6 +46,6 @@ const components = [
     FlexLayoutModule,
     A11yModule,
   ],
-  exports: [components, GetCategoriesDirective]
+  exports: [components]
 })
 export class ComponentModule { }

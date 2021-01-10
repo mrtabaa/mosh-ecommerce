@@ -1,4 +1,5 @@
 export interface ProductTypeCategory {
-    type?: string;
-    category?: string;
+    typeCatDict: {
+        [type: string]: ProductTypeCategory[]
+    };
 }

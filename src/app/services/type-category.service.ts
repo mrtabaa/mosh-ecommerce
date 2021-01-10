@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
-import { AngularFireDatabase } from '@angular/fire/database';
+import { AngularFireDatabase, SnapshotAction } from '@angular/fire/database';
+import { Observable } from 'rxjs';
 import { take } from 'rxjs/operators';
+import { ProductTypeCategory } from '../models/ProductTypes';
 
 @Injectable({
   providedIn: 'root'
@@ -8,36 +10,48 @@ import { take } from 'rxjs/operators';
 export class TypeCategoryService {
 
   typesList: string[] = [];
-  categoryList: string[] = [];
+  typeCategoryObjList: ProductTypeCategory[] = [];
+  categoriesList: any[] = [];
 
   constructor(private db: AngularFireDatabase) {
     // pre-load for better performance
-    this.getTypes();
+    this.getTypeCategoryObjList();
   }
 
-  private getTypes(): void {
-    this.db.list<string>('/typeAndCategory/').snapshotChanges()
+  private getTypeCategoryObjList(): void {
+    this.db.list('/typeAndCategory/').snapshotChanges()
       .pipe(take(1))
       .subscribe(obj => {
         for (const iterator of obj) {
+          const type = iterator.key;
+          // get typeCategoryObjList
+          this.db.list<ProductTypeCategory>('/typeAndCategory/' + type).valueChanges()
+            .pipe(take(1))
+            .subscribe((catList: ProductTypeCategory[]) => {
+              this.typeCategoryObjList.push({
+                typeCatDict: {
+                  [type]: catList
+                }
+              });
+            });
+
+          // get types
           this.typesList.push(iterator.key);
         }
       });
   }
 
   getCategory(selectedType: string): string[] {
-    this.categoryList = [];
+    this.categoriesList = [];
 
-    this.db.list<string>('/typeAndCategory/' + selectedType.toLowerCase()).valueChanges()
-      .pipe(take(1))
-      .subscribe(obj => {
-        for (const iterator of obj) {
-          if (iterator !== '') {
-            this.categoryList.push(iterator);
-          }
-        }
-      });
-    return this.categoryList;
+    for (const iterator of this.typeCategoryObjList) {
+      if (iterator.typeCatDict[selectedType]) {
+        this.categoriesList = iterator.typeCatDict[selectedType];
+        break;
+      }
+    }
+
+    return this.categoriesList;
   }
 
   async addType(newType: string): Promise<void> {
@@ -55,13 +69,13 @@ export class TypeCategoryService {
     newCategory = newCategory.toLowerCase();
     selectedType = selectedType.toLowerCase();
 
-    if (this.categoryList && !this.categoryList.includes(newCategory)) {
+    if (this.categoriesList && !this.categoriesList.includes(newCategory)) {
       await this.db.list<string>('/typeAndCategory/' + selectedType)
         .push(newCategory);
 
-      this.categoryList.push(newCategory);
+      this.categoriesList.push(newCategory);
     }
 
-    return this.categoryList;
+    return this.categoriesList;
   }
 }

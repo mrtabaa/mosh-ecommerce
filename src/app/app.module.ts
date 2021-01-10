@@ -28,7 +28,6 @@ import { TypeCategoryService } from './services/type-category.service';
     ComponentModule, // Contains:
     // Components,
     // BrowserAnimationsModule, ReactiveFormsModule, MaterialModule, FlexLayoutModule,
-    // GetCategoriesDirective
 
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,

@@ -1,0 +1,28 @@
+form {
+  margin-top: 10%;
+  padding: 0 30px;
+}
+
+form .addWarning {
+  color: #283593;
+}
+
+form .btnSave {
+  margin-top: 5%;
+  width: 30%;
+}
+
+.newItemAdded {
+  background-color: #FCE4EC;
+  color: #283593;
+  padding: 1em;
+}
+
+#typeAndCategory .newTypeCategoryInput {
+  margin: 1em 0;
+}
+
+.newItemButton {
+  background-color: #f1f1f1;
+}
+/*# sourceMappingURL=new-product.component.css.map */

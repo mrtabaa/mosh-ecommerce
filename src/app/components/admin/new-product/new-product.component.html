@@ -166,6 +166,7 @@
                         <input formControlName="price" [required]="true" matInput placeholder="Price">
                         <span matPrefix>$&nbsp;</span>
                         <mat-error *ngIf="Price.hasError('required')">Price field is required.</mat-error>
+                        <mat-error *ngIf="Price.hasError('pattern')">Enter numbers only.</mat-error>
                     </mat-form-field>
                     <mat-icon *ngIf="Price.valid" color="primary">
                         check_circle

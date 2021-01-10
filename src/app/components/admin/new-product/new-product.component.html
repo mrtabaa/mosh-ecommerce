@@ -20,7 +20,8 @@
                 <!-- #region options -->
                 <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="3px">
                     <mat-form-field *ngIf="Type.value !== 'newType'" fxFlex="95">
-                        <mat-select formControlName="type" [required]="true" placeholder="Type" fxLayout="column"
+                        <mat-select formControlName="type" [required]="true"
+                            (selectionChange)="getCategories($event.value)" placeholder="Type" fxLayout="column"
                             fxLayoutAlign="center center">
                             <!-- newType option -->
                             <mat-option class="newItemButton">
@@ -31,7 +32,8 @@
                             </mat-option>
 
                             <!-- PRINT TYPES -->
-                            <mat-option *ngFor="let item of types" [value]="item" (click)="getCategories(item)">
+                            <mat-option *ngFor="let item of types" [value]="item" (click)="getCategories(item)"
+                                [selectedType]="item">
                                 {{item | titlecase}}
                             </mat-option>
                         </mat-select>
@@ -92,8 +94,8 @@
                             </mat-option>
 
                             <!-- PRINT CATEGORIES -->
-                            <ng-container *ngFor="let item of categories;">
-                                <mat-option [value]="item">
+                            <ng-container *ngFor="let item of categories">
+                                <mat-option [value]="item" *ngIf="item !== ''">
                                     {{item | uppercase}}
                                 </mat-option>
                             </ng-container>

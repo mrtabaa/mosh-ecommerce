@@ -1,11 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { AbstractControl, FormBuilder, FormGroup, ValidationErrors, Validators } from '@angular/forms';
+import { AbstractControl, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { ClickErrorStateMatcher } from 'src/app/common/validators/click-error-state.matcher';
 import { Product } from 'src/app/models/product.model';
 import { NewProductService } from 'src/app/services/new-product.service';
 import { TypeCategoryService } from 'src/app/services/type-category.service';
-import { NewProductValidators } from './new-product.validator';
-import { NewCategoryErrorStateMatcher } from './new-product-error-state.matcher';
+import { NewProductValidators } from './helpers/new-product.validator';
+import { NewCategoryErrorStateMatcher } from './helpers/new-product-error-state.matcher';
 
 @Component({
   selector: 'app-new-product',
@@ -19,16 +19,13 @@ export class NewProductComponent implements OnInit {
 
   types: string[];
   categories: string[];
+  selectedType: string;
 
   constructor(
     private typeCategoryService: TypeCategoryService,
     private newProductService: NewProductService,
     private fb: FormBuilder) {
     this.types = this.typeCategoryService.typesList; // get types
-  }
-
-  printError(): void {
-    console.log(this.form);
   }
 
   ngOnInit(): void {
@@ -69,14 +66,16 @@ export class NewProductComponent implements OnInit {
       });
   }
 
-  getCategories(itemType?: string): void {
-    this.Category.setValue(null);
-    this.categories = this.typeCategoryService.getCategory(itemType);
-
-    this.CategoriesCtrl.setValue(this.categories);
+  getCategories(selectedType: string): void {
+    if (selectedType) {
+      this.Category.setValue(null);
+      this.categories = this.typeCategoryService.getCategory(selectedType);
+      this.CategoriesCtrl.setValue(this.categories); // for validation
+    }
   }
 
   addType(): void {
+    console.log(this.NewType.value);
     if (this.NewType.hasError('newItemNotAdded') || !this.NewType.hasError('uniqueType')) {
       this.typeCategoryService.addType(this.NewType.value); // add Type if it doesn't exist
       this.AddedType.setValue(this.NewType.value);
@@ -86,8 +85,8 @@ export class NewProductComponent implements OnInit {
     }
   }
 
-  addTypeEnter(newTypeInput: string): string {
-    console.log(newTypeInput);
+  addItemOnEnter(item: string): string {
+    console.log(item);
     return null;
   }
 
@@ -105,10 +104,6 @@ export class NewProductComponent implements OnInit {
       this.NewCategory.setErrors(null);
       this.NewCategoryGroup.setErrors(null);
     }
-  }
-
-  resetCategory(): void {
-    this.categories = [];
   }
 
   onSubmit($event: Product): void {

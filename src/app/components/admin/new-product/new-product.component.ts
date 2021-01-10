@@ -34,8 +34,14 @@ export class NewProductComponent implements OnInit {
       type: ['', Validators.required],
       category: ['', Validators.required],
       title: ['', Validators.required],
-      price: ['', [Validators.required, Validators.pattern(/^[0-9]\d*$/)]],
-      imageUrl: ['', Validators.required],
+      price: ['', [
+        Validators.required,
+        Validators.pattern(/^[0-9]\d*$/)
+      ]],
+      imageUrl: ['', [
+        Validators.required,
+        Validators.pattern('(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?')
+      ]],
 
       newType: ['', {
         validators: [

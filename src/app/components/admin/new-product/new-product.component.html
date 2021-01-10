@@ -176,9 +176,9 @@
                 <!-- #region IMAGEURL -->
                 <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="3px">
                     <mat-form-field fxFlex="95">
-                        <input formControlName="imageUrl" [required]="true" matInput placeholder="Image URL"
-                            (click)="printError()">
+                        <input formControlName="imageUrl" [required]="true" matInput placeholder="Image URL">
                         <mat-error *ngIf="ImageUrl.hasError('required')">Image URL field is required.</mat-error>
+                        <mat-error *ngIf="ImageUrl.hasError('pattern')">Enter a valid URL.</mat-error>
                     </mat-form-field>
                     <mat-icon *ngIf="ImageUrl.valid" color="primary">
                         check_circle

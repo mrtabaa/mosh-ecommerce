@@ -17,9 +17,13 @@ import { ErrorStateMatcher } from '@angular/material/core';
 import { DefaultErrorStateMatcher } from './common/validators/default-error-state.matcher';
 import { TypeCategoryService } from './services/type-category.service';
 
+import { DecimalPipe } from '@angular/common';
+
+
 @NgModule({
   declarations: [
     AppComponent,
+
   ],
   imports: [
     BrowserModule,
@@ -28,6 +32,7 @@ import { TypeCategoryService } from './services/type-category.service';
     ComponentModule, // Contains:
     // Components,
     // BrowserAnimationsModule, ReactiveFormsModule, MaterialModule, FlexLayoutModule,
+    // PriceUsdDirective
 
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,
@@ -38,7 +43,8 @@ import { TypeCategoryService } from './services/type-category.service';
     UserService,
     NewProductService,
     TypeCategoryService,
-    { provide: ErrorStateMatcher, useClass: DefaultErrorStateMatcher }
+    { provide: ErrorStateMatcher, useClass: DefaultErrorStateMatcher },
+    DecimalPipe
   ],
   bootstrap: [AppComponent]
 })

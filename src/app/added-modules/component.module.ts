@@ -20,6 +20,8 @@ import { CheckoutComponent } from '../components/checkout/checkout.component';
 import { NoAccessComponent } from '../components/no-access/no-access.component';
 import { NotFoundComponent } from '../components/not-found/not-found.component';
 
+import { PriceUsdDirective } from '../components/admin/new-product/helpers/price-usd.directive';
+
 const components = [
   ManageOrdersComponent,
   ManageProductsComponent,
@@ -35,7 +37,7 @@ const components = [
 ];
 
 @NgModule({
-  declarations: [components],
+  declarations: [components, PriceUsdDirective],
   imports: [
     CommonModule,
     AppRoutingModule,
@@ -46,6 +48,6 @@ const components = [
     FlexLayoutModule,
     A11yModule,
   ],
-  exports: [components]
+  exports: [components, PriceUsdDirective]
 })
 export class ComponentModule { }

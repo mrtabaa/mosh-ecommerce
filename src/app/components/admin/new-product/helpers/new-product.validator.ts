@@ -1,3 +1,4 @@
+import { ContentObserver } from '@angular/cdk/observers';
 import { AbstractControl, ValidationErrors } from '@angular/forms';
 
 export class NewProductValidators {
@@ -51,4 +52,5 @@ export class NewProductValidators {
 
         return category && type.invalid ? { noPrerequisiteSelected: true } : null;
     }
+
 }

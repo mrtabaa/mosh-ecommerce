@@ -163,10 +163,11 @@
                 <!-- #region PRICE -->
                 <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="3px">
                     <mat-form-field fxFlex="95">
-                        <input formControlName="price" [required]="true" matInput placeholder="Price">
+                        <input formControlName="price" [required]="true" [maxLength]="9" appPriceUsd matInput
+                            placeholder="price">
                         <span matPrefix>$&nbsp;</span>
                         <mat-error *ngIf="Price.hasError('required')">Price field is required.</mat-error>
-                        <mat-error *ngIf="Price.hasError('pattern')">Enter numbers only.</mat-error>
+                        <mat-error *ngIf="Price.hasError('invalidPrice')">Enter a valid price. e.g 5.99</mat-error>
                     </mat-form-field>
                     <mat-icon *ngIf="Price.valid" color="primary">
                         check_circle
@@ -177,6 +178,10 @@
                 <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="3px">
                     <mat-form-field fxFlex="95">
                         <input formControlName="imageUrl" [required]="true" matInput placeholder="Image URL">
+                        <!-- <button mat-button *ngIf="value" matSuffix mat-icon-button aria-label="Clear"
+                            (click)="value=''">
+                            <mat-icon>close</mat-icon>
+                        </button> -->
                         <mat-error *ngIf="ImageUrl.hasError('required')">Image URL field is required.</mat-error>
                         <mat-error *ngIf="ImageUrl.hasError('pattern')">Enter a valid URL.</mat-error>
                     </mat-form-field>
@@ -197,4 +202,4 @@
     </div>
 </form>
 
-<p>{{ form.value | json }}</p>
+<!-- <p>{{ form.value | json }}</p> -->

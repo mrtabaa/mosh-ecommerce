@@ -21,6 +21,7 @@ import { NoAccessComponent } from '../components/no-access/no-access.component';
 import { NotFoundComponent } from '../components/not-found/not-found.component';
 
 import { PriceUsdDirective } from '../components/admin/new-product/helpers/price-usd.directive';
+import { RemoveDoubleSpaceDirective } from '../common/directives/remove-double-space.directive';
 
 const components = [
   ManageOrdersComponent,
@@ -36,8 +37,13 @@ const components = [
   ShoppingCartComponent
 ];
 
+const directives = [
+  PriceUsdDirective,
+  RemoveDoubleSpaceDirective
+];
+
 @NgModule({
-  declarations: [components, PriceUsdDirective],
+  declarations: [components, directives],
   imports: [
     CommonModule,
     AppRoutingModule,
@@ -48,6 +54,6 @@ const components = [
     FlexLayoutModule,
     A11yModule,
   ],
-  exports: [components, PriceUsdDirective]
+  exports: [components, directives]
 })
 export class ComponentModule { }

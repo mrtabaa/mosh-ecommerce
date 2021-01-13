@@ -51,7 +51,12 @@ export class NewProductComponent implements OnInit {
       }],
 
       newCategoryGroup: this.fb.group({
-        newCategory: ['', [Validators.required, NewProductValidators.checkNewTypeCategoryAdded]],
+        newCategory: ['',
+          {
+            validators: [
+              Validators.required,
+              NewProductValidators.checkNewTypeCategoryAdded]
+          }],
         categoriesCtrl: [],
       },
         { validators: [NewProductValidators.checkUniqueCategory] }
@@ -73,29 +78,30 @@ export class NewProductComponent implements OnInit {
   getCategories(selectedType: MatSelectChange): void {
     if (selectedType.value) {
       this.Category.setValue(null);
+      this.AddedCategory.setValue(null);
       this.categories = this.typeCategoryService.getCategory(selectedType.value);
       this.CategoriesCtrl.setValue(this.categories); // for validation
-      console.log(selectedType.source);
     }
   }
 
   addType(): void {
-    if (this.NewType.hasError('newItemNotAdded') || !this.NewType.hasError('uniqueType')) {
-      this.typeCategoryService.addType(this.NewType.value); // add Type if it doesn't exist
-      this.AddedType.setValue(this.NewType.value);
-      this.Type.setValue(this.NewType.value);
+    let value = this.NewType.value as string;
+    value = value.trim();
+
+    if (this.NewType.hasError('newItemNotAdded') || !this.NewType.hasError('uniqueType') && value !== '') {
+      this.typeCategoryService.addType(value); // add Type if it doesn't exist
+      this.AddedType.setValue(value);
+      this.Type.setValue(value);
       this.NewType.setValue('');
       this.NewType.markAsPristine();
       this.categories = [];
     }
   }
 
-  addItemOnEnter(item: string): string {
-    console.log(item);
-    return null;
-  }
-
   addCategory(): void {
+    let value = this.NewCategory.value as string;
+    value = value.trim();
+
     if (this.NewCategory.hasError('newItemNotAdded') && !this.NewCategoryGroup.hasError('uniqueCategory')) {
       this.categories = [];
       this.typeCategoryService.addCategory(this.NewCategory.value, this.Type.value)
@@ -105,6 +111,7 @@ export class NewProductComponent implements OnInit {
         });
 
       this.Category.setValue(this.NewCategory.value);
+      this.AddedCategory.setValue(this.NewCategory.value);
       this.NewCategory.setValue(null);
       this.NewCategory.setErrors(null);
       this.NewCategoryGroup.setErrors(null);

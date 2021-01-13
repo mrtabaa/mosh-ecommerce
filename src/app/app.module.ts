@@ -22,8 +22,7 @@ import { DecimalPipe } from '@angular/common';
 
 @NgModule({
   declarations: [
-    AppComponent,
-
+    AppComponent
   ],
   imports: [
     BrowserModule,
@@ -32,7 +31,7 @@ import { DecimalPipe } from '@angular/common';
     ComponentModule, // Contains:
     // Components,
     // BrowserAnimationsModule, ReactiveFormsModule, MaterialModule, FlexLayoutModule,
-    // PriceUsdDirective
+    // PriceUsdDirective, RemoveDoubleSpaceDirective
 
     AngularFireModule.initializeApp(environment.firebase),
     AngularFireAuthModule,

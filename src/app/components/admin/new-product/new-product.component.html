@@ -10,7 +10,7 @@
                 </p>
                 <!-- New Category -->
                 <p *ngIf="AddedCategory.value" class="newItemAdded">
-                    {{AddedCategory.value | titlecase}} added to the {{Type.value | titlecase}}'s category.
+                    {{AddedCategory.value | titlecase}} added to the {{Type.value | titlecase}} Type's category.
                 </p>
             </div>
             <!-- #endregion -->
@@ -46,7 +46,7 @@
                 <!-- #region newType -->
                 <mat-form-field class="newTypeCategoryInput" *ngIf="Type.value === 'newType'" fxLayout="column"
                     fxLayoutAlign="start stretch">
-                    <input formControlName="newType" [required]="true" matInput (keydown.enter)="addType()"
+                    <input formControlName="newType" [required]="true" matInput (keydown.enter)="addType();"
                         placeholder="New Type" [cdkTrapFocusAutoCapture]="Type.value === 'newType'"
                         [cdkTrapFocus]="Type.value === 'newType'" fxFlex="100" />
                     <!-- #region buttons -->

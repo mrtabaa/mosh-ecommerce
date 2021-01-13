@@ -18,7 +18,7 @@ export class PriceUsdDirective {
     let value: string;
     value = this.elRef.nativeElement.value as string;
     value = this.removeNonDigtis(value); // remove all non-digit values
-    value = this.add$Decimal(value); // Add . to the -2 index
+    value = this.addDecimalPoint(value); // Add . to the -2 index
     value = this.applyDecimalPipe(value); // to divide every thousand
     this.elRef.nativeElement.value = value;
   }
@@ -40,7 +40,7 @@ export class PriceUsdDirective {
     return digitArray.join('');
   }
 
-  add$Decimal(value: string): string {
+  addDecimalPoint(value: string): string {
     const inputArray = value.split(''); // ['0', '.', '0', '0']
     inputArray.splice(-2, 0, '.'); // place decimal in -2
     return inputArray.join('');

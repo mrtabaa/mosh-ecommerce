@@ -164,7 +164,7 @@
                 <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="3px">
                     <mat-form-field fxFlex="95">
                         <input formControlName="price" [required]="true" [maxLength]="9" appPriceUsd matInput
-                            placeholder="price">
+                            placeholder="Price">
                         <span matPrefix>$&nbsp;</span>
                         <mat-error *ngIf="Price.hasError('required')">Price field is required.</mat-error>
                         <mat-error *ngIf="Price.hasError('invalidPrice')">Enter a valid price. e.g 5.99</mat-error>

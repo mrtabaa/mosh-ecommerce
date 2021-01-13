@@ -1,4 +1,3 @@
-import { ContentObserver } from '@angular/cdk/observers';
 import { AbstractControl, ValidationErrors } from '@angular/forms';
 
 export class NewProductValidators {
@@ -25,7 +24,7 @@ export class NewProductValidators {
             return null;
         };
     }
-    // type not added
+    // check if at least one type is added or newType is not added
     static checkNewTypeCategoryAdded(control: AbstractControl): ValidationErrors | null {
         return control.value && (control.value as string).length > 0
             ? { newItemNotAdded: true }

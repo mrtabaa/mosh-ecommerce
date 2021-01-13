@@ -10,7 +10,9 @@ export class RemoveDoubleSpaceDirective {
   @HostListener('keyup') removeDoubleSpace(): void {
     const value = this.elRef.nativeElement.value as string;
 
-    value.startsWith('  ') || value.endsWith('  ')
+    // startsWith: leading single space
+    // endsWith: trailing double-space
+    value.startsWith(' ') || value.endsWith('  ')
       ? this.elRef.nativeElement.value = value.trim()
       : this.elRef.nativeElement.value = value;
   }

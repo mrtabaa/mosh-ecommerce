@@ -113,8 +113,9 @@
                 <!-- #region newCategory -->
                 <mat-form-field formGroupName="newCategoryGroup" *ngIf="Category.value === 'newCategory'"
                     fxLayout="column" fxLayoutAlign="start stretch">
-                    <input formControlName="newCategory" [required]="true" (keydown.enter)="addCategory()"
-                        placeholder="New Category" [cdkTrapFocusAutoCapture]="Category.value === 'newCategory'"
+                    <input formControlName="newCategory" [required]="true" appRemoveDoubleSpace
+                        (keydown.enter)="addCategory()" placeholder="New Category"
+                        [cdkTrapFocusAutoCapture]="Category.value === 'newCategory'"
                         [cdkTrapFocus]="Category.value === 'newCategory'" matInput fxFlex="100" />
                     <!-- #region buttons -->
                     <button type="button" mat-mini-fab (click)="addCategory()"
@@ -152,7 +153,8 @@
                 <!-- #region TITLE -->
                 <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="3px">
                     <mat-form-field fxFlex="95">
-                        <input formControlName="title" [required]="true" matInput placeholder="Title">
+                        <input formControlName="title" [required]="true" appRemoveDoubleSpace matInput
+                            placeholder="Title">
                         <mat-error *ngIf="Title.hasError('required')">Title field is required.</mat-error>
                     </mat-form-field>
                     <mat-icon *ngIf="Title.valid" color="primary">
@@ -177,11 +179,8 @@
                 <!-- #region IMAGEURL -->
                 <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="3px">
                     <mat-form-field fxFlex="95">
-                        <input formControlName="imageUrl" [required]="true" matInput placeholder="Image URL">
-                        <!-- <button mat-button *ngIf="value" matSuffix mat-icon-button aria-label="Clear"
-                            (click)="value=''">
-                            <mat-icon>close</mat-icon>
-                        </button> -->
+                        <input formControlName="imageUrl" [required]="true" appRemoveDoubleSpace matInput
+                            placeholder="Image URL">
                         <mat-error *ngIf="ImageUrl.hasError('required')">Image URL field is required.</mat-error>
                         <mat-error *ngIf="ImageUrl.hasError('pattern')">Enter a valid URL.</mat-error>
                     </mat-form-field>

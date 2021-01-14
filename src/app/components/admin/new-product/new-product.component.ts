@@ -14,6 +14,7 @@ import { MatSelectChange } from '@angular/material/select';
   styleUrls: ['./new-product.component.scss']
 })
 export class NewProductComponent implements OnInit {
+  //#region variables and objects
   form: FormGroup;
   clickErrorMatcher = new ClickErrorStateMatcher();
   categoryExistErrorStateMatcher = new NewCategoryErrorStateMatcher();
@@ -21,6 +22,7 @@ export class NewProductComponent implements OnInit {
   types: string[];
   categories: string[];
   selectedType: string;
+  //#endregion
 
   constructor(
     private typeCategoryService: TypeCategoryService,
@@ -33,8 +35,8 @@ export class NewProductComponent implements OnInit {
     this.form = this.fb.group({
       type: ['', Validators.required],
       category: ['', Validators.required],
-      title: ['', Validators.required],
-      price: ['', Validators.required],
+      title: ['', [Validators.required, Validators.pattern(/\S/g)]],
+      price: ['', [Validators.required, Validators.pattern('0.00')]],
       imageUrl: ['', [
         Validators.required,
         Validators.pattern('(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?')
@@ -43,6 +45,7 @@ export class NewProductComponent implements OnInit {
       newType: ['', {
         validators: [
           Validators.required,
+          Validators.pattern(/\S/g),
           NewProductValidators.checkUniqueType(this.types),
           NewProductValidators.checkNewTypeCategoryAdded,
         ],
@@ -55,6 +58,7 @@ export class NewProductComponent implements OnInit {
           {
             validators: [
               Validators.required,
+              Validators.pattern(/\S/g),
               NewProductValidators.checkNewTypeCategoryAdded]
           }],
         categoriesCtrl: [],
@@ -85,10 +89,9 @@ export class NewProductComponent implements OnInit {
   }
 
   addType(): void {
-    let value = this.NewType.value as string;
-    value = value.trim();
+    const value = this.NewType.value as string;
 
-    if (this.NewType.hasError('newItemNotAdded') || !this.NewType.hasError('uniqueType') && value !== '') {
+    if (value === '/\s/g' || this.NewType.hasError('newItemNotAdded') || !this.NewType.hasError('uniqueType')) {
       this.typeCategoryService.addType(value); // add Type if it doesn't exist
       this.AddedType.setValue(value);
       this.Type.setValue(value);
@@ -99,19 +102,21 @@ export class NewProductComponent implements OnInit {
   }
 
   addCategory(): void {
-    let value = this.NewCategory.value as string;
-    value = value.trim();
-
-    if (this.NewCategory.hasError('newItemNotAdded') && !this.NewCategoryGroup.hasError('uniqueCategory')) {
+    const newItem = this.NewCategory.value.trim();
+    if (
+      newItem !== ' '
+      && this.NewCategory.hasError('newItemNotAdded')
+      && !this.NewCategoryGroup.hasError('uniqueCategory')
+    ) {
       this.categories = [];
-      this.typeCategoryService.addCategory(this.NewCategory.value, this.Type.value)
+      this.typeCategoryService.addCategory(newItem, this.Type.value)
         .then(catList => {
           this.CategoriesCtrl.setValue(catList);
           this.categories = catList;
         });
 
-      this.Category.setValue(this.NewCategory.value);
-      this.AddedCategory.setValue(this.NewCategory.value);
+      this.Category.setValue(newItem);
+      this.AddedCategory.setValue(newItem);
       this.NewCategory.setValue(null);
       this.NewCategory.setErrors(null);
       this.NewCategoryGroup.setErrors(null);
@@ -122,7 +127,7 @@ export class NewProductComponent implements OnInit {
     this.newProductService.createProduct($event);
   }
 
-  // FORM
+  //#region get FORM controls
   get Type(): AbstractControl {
     return this.form.get('type');
   }
@@ -159,4 +164,5 @@ export class NewProductComponent implements OnInit {
   get AddedCategory(): AbstractControl {
     return this.form.get('addedCategory');
   }
+  //#endregion
 }

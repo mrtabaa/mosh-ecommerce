@@ -24,7 +24,7 @@ export class NewProductValidators {
             return null;
         };
     }
-    // check if at least one type is added or newType is not added
+    // check if newType/newCategory length > 0, else doesn't add the item
     static checkNewTypeCategoryAdded(control: AbstractControl): ValidationErrors | null {
         return control.value && (control.value as string).length > 0
             ? { newItemNotAdded: true }

@@ -1,15 +1,15 @@
 <form [formGroup]="form" (ngSubmit)="onSubmit(form.value); form.reset();" fxLayout="row" fxLayoutAlign="center">
     <div fxLayout="column" fxFlex="0 1 380px">
 
-        <div id="typeAndCategory">
+        <div id="typeAndCategory" fxFlex>
             <!-- #region WARNINGS: NEW TYPE/CATEGORY -->
-            <div *ngIf="(AddedType || AddedCategory)">
+            <div *ngIf="(AddedType || AddedCategory)" fxLayout="column">
                 <!-- New Type -->
-                <p *ngIf="AddedType.value" class="newItemAdded">
+                <p *ngIf="AddedType.value" class="newItemAdded" fxFlex="95">
                     {{AddedType.value | titlecase}} added to the Type list.
                 </p>
                 <!-- New Category -->
-                <p *ngIf="AddedCategory.value" class="newItemAdded">
+                <p *ngIf="AddedCategory.value" class="newItemAdded" fxFlex="95">
                     {{AddedCategory.value | titlecase}} Category added to the Type {{Type.value | titlecase}}.
                 </p>
             </div>

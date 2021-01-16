@@ -10,7 +10,7 @@
                 </p>
                 <!-- New Category -->
                 <p *ngIf="AddedCategory.value" class="newItemAdded" fxFlex="95">
-                    {{AddedCategory.value | titlecase}} Category added to the Type {{Type.value | titlecase}}.
+                    {{AddedCategory.value | uppercase}} Category added to the Type {{Type.value | titlecase}}.
                 </p>
             </div>
             <!-- #endregion -->
@@ -120,6 +120,7 @@
                     fxLayout="column" fxLayoutAlign="start stretch">
                     <input formControlName="newCategory" [required]="true" appRemoveDoubleSpace
                         (keydown.enter)="addCategory()" placeholder="New Category"
+                        [errorStateMatcher]="categoryExistErrorStateMatcher"
                         [cdkTrapFocusAutoCapture]="Category.value === 'newCategory'"
                         [cdkTrapFocus]="Category.value === 'newCategory'" matInput fxFlex="100" />
                     <!-- #region buttons -->
@@ -127,7 +128,7 @@
                         color="primary">
                         Add
                     </button>
-                    <button type="button" mat-mini-fab color="accent">
+                    <button type="button" (click)="Category.setValue(null)" mat-mini-fab color="accent">
                         X
                     </button>
                     <!-- #endregion -->
@@ -144,7 +145,7 @@
                     <mat-error *ngIf="NewCategory.hasError('pattern')">
                         Only alphabet, numbers and dash(-) are allowed.
                     </mat-error>
-                    <mat-error *ngIf="NewCategory.valid" class="addWarning">
+                    <mat-error *ngIf="NewCategoryGroup.valid" class="addWarning">
                         Hit <b>Enter</b>/<b>Add</b> or <b>X</b> to Cancel.
                     </mat-error>
                     <!-- #endregion -->

@@ -9,6 +9,7 @@ import { ErrorStateMatcher } from '@angular/material/core';
 
 export class NewCategoryErrorStateMatcher implements ErrorStateMatcher {
     isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
-        return !!(control.parent.hasError('notUniqueCategory'));
+        return !!(control.parent.hasError('uniqueCategory'));
+        // return !!(true);
     }
 }

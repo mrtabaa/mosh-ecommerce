@@ -94,15 +94,14 @@ export class NewProductComponent implements OnInit {
     const newItem = this.NewType.value.trim();
 
     if (this.NewType.valid) {
-      this.typeCategoryService.addType(newItem); // add Type if it doesn't exist
-      this.AddedType.setValue(newItem);
-      this.Type.setValue(newItem);
-      this.NewType.reset();
-      // this.NewType.setValue('');
-      // this.NewType.markAsPristine();
-      this.AddedCategory.reset();
-      this.Category.reset();
-      this.categories = [];
+      this.typeCategoryService.addType(newItem).then(() => {
+        this.AddedType.setValue(newItem);
+        this.Type.setValue(newItem);
+        this.NewType.reset();
+        this.AddedCategory.reset();
+        this.Category.reset();
+        this.categories = [];
+      });
     }
   }
 
@@ -115,13 +114,13 @@ export class NewProductComponent implements OnInit {
         .then(catList => {
           this.CategoriesCtrl.setValue(catList);
           this.categories = catList;
-        });
 
-      this.Category.setValue(newItem);
-      this.AddedCategory.setValue(newItem);
-      this.NewCategory.setValue(null);
-      this.NewCategory.setErrors(null);
-      this.NewCategoryGroup.setErrors(null);
+          this.Category.setValue(newItem);
+          this.AddedCategory.setValue(newItem);
+          this.NewCategory.setValue(null);
+          this.NewCategory.setErrors(null);
+          this.NewCategoryGroup.setErrors(null);
+        });
     }
   }
 

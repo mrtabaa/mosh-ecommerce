@@ -205,6 +205,12 @@
                 <!-- #endregion -->
             </ng-container>
             <!-- #region submitBtn -->
+            <!-- Error message on submit failiure  -->
+            <div *ngIf="isSubmitFail" fxLayout="row">
+                <p class="submitFailed" fxFlex="95">
+                    An error occurred while creating the product! <br />Please try again.
+                </p>
+            </div>
             <button id="submit" mat-raised-button color="primary" [disabled]="form.hasError('invalidForm')"
                 fxFlexAlign="center" class="btnSave">
                 Save
@@ -215,4 +221,4 @@
     </div>
 </form>
 
-<p>{{ form.value | json }}</p>
+<!-- <p>{{ form.value | json }}</p> -->

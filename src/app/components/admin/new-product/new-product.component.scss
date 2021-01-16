@@ -27,3 +27,9 @@ form{
 .newItemButton{
     background-color: $selectTopButtonColor;
 }
+
+.submitFailed{
+    background-color: #E3F2FD;
+    color: #F44336;
+    padding: 1em;
+}

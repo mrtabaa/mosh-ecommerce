@@ -7,6 +7,7 @@ import { TypeCategoryService } from 'src/app/services/type-category.service';
 import { NewProductValidators } from './helpers/new-product.validator';
 import { NewCategoryErrorStateMatcher } from './helpers/new-product-error-state.matcher';
 import { MatSelectChange } from '@angular/material/select';
+import { throwError } from 'rxjs';
 
 @Component({
   selector: 'app-new-product',
@@ -21,6 +22,8 @@ export class NewProductComponent implements OnInit {
 
   types: string[];
   categories: string[];
+
+  isSubmitFail: boolean;
   //#endregion
 
   constructor(
@@ -86,6 +89,7 @@ export class NewProductComponent implements OnInit {
       this.CategoriesCtrl.setValue(this.categories); // for validation
       this.AddedType.reset();
       this.AddedCategory.reset();
+      this.isSubmitFail = null;
     }
   }
 
@@ -124,7 +128,14 @@ export class NewProductComponent implements OnInit {
   }
 
   onSubmit($event: Product): void {
-    this.newProductService.createProduct($event);
+    // double-check if all required values are entered successfully before creating a product on database.
+    if (this.Type.value && this.Category.value && this.Title.value && this.Price.value && this.ImageUrl.value) {
+      this.isSubmitFail = null;
+      this.newProductService.createProduct($event);
+    }
+    else {
+      this.isSubmitFail = true;
+    }
   }
 
   //#region get FORM controls

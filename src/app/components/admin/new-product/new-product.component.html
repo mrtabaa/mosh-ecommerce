@@ -31,7 +31,7 @@
                             </mat-option>
 
                             <!-- PRINT TYPES -->
-                            <mat-option *ngFor="let item of types" [value]="item" [selectedType]="item">
+                            <mat-option *ngFor="let item of types" [value]="item">
                                 {{item | titlecase}}
                             </mat-option>
                         </mat-select>
@@ -214,4 +214,4 @@
     </div>
 </form>
 
-<!-- <p>{{ form.value | json }}</p> -->
+<p>{{ form.value | json }}</p>

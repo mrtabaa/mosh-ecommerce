@@ -35,8 +35,8 @@ export class NewProductComponent implements OnInit {
     this.form = this.fb.group({
       type: ['', Validators.required],
       category: ['', Validators.required],
-      title: ['', [Validators.required, Validators.pattern(/\S/g)]],
-      price: ['', [Validators.required, Validators.pattern('0.00')]],
+      title: ['', [Validators.required, Validators.minLength(2)]],
+      price: ['', [Validators.required, NewProductValidators.checkPrice]],
       imageUrl: ['', [
         Validators.required,
         Validators.pattern('(https?://)?([\\da-z.-]+)\\.([a-z.]{2,6})[/\\w .-]*/?')
@@ -45,22 +45,22 @@ export class NewProductComponent implements OnInit {
       newType: ['', {
         validators: [
           Validators.required,
-          Validators.pattern(/\S/g),
+          Validators.minLength(2),
+          Validators.pattern(/[a-z&A-Z&0-9&-]/),
           NewProductValidators.checkUniqueType(this.types),
-          NewProductValidators.checkNewTypeCategoryAdded,
         ],
         asyncValidators: [],
         updateOn: 'change'
       }],
 
       newCategoryGroup: this.fb.group({
-        newCategory: ['',
-          {
-            validators: [
-              Validators.required,
-              Validators.pattern(/\S/g),
-              NewProductValidators.checkNewTypeCategoryAdded]
-          }],
+        newCategory: ['', {
+          validators: [
+            Validators.required,
+            Validators.minLength(2),
+            Validators.pattern(/[a-z&A-Z&0-9&-]/),
+          ]
+        }],
         categoriesCtrl: [],
       },
         { validators: [NewProductValidators.checkUniqueCategory] }
@@ -89,12 +89,12 @@ export class NewProductComponent implements OnInit {
   }
 
   addType(): void {
-    const value = this.NewType.value as string;
+    const newItem = this.NewType.value.trim();
 
-    if (value === '/\s/g' || this.NewType.hasError('newItemNotAdded') || !this.NewType.hasError('uniqueType')) {
-      this.typeCategoryService.addType(value); // add Type if it doesn't exist
-      this.AddedType.setValue(value);
-      this.Type.setValue(value);
+    if (this.NewType.valid) {
+      this.typeCategoryService.addType(newItem); // add Type if it doesn't exist
+      this.AddedType.setValue(newItem);
+      this.Type.setValue(newItem);
       this.NewType.setValue('');
       this.NewType.markAsPristine();
       this.categories = [];
@@ -103,11 +103,8 @@ export class NewProductComponent implements OnInit {
 
   addCategory(): void {
     const newItem = this.NewCategory.value.trim();
-    if (
-      newItem !== ' '
-      && this.NewCategory.hasError('newItemNotAdded')
-      && !this.NewCategoryGroup.hasError('uniqueCategory')
-    ) {
+
+    if (this.NewCategoryGroup.valid) {
       this.categories = [];
       this.typeCategoryService.addCategory(newItem, this.Type.value)
         .then(catList => {

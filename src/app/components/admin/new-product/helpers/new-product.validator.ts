@@ -1,3 +1,4 @@
+import { ContentObserver } from '@angular/cdk/observers';
 import { AbstractControl, ValidationErrors } from '@angular/forms';
 
 export class NewProductValidators {
@@ -26,7 +27,7 @@ export class NewProductValidators {
     }
     // check if newType/newCategory length > 0, else doesn't add the item
     static checkNewTypeCategoryAdded(control: AbstractControl): ValidationErrors | null {
-        return control.value && (control.value as string).length > 0
+        return control.value && (control.value as string).length < 2
             ? { newItemNotAdded: true }
             : null;
     }
@@ -52,4 +53,14 @@ export class NewProductValidators {
         return category && type.invalid ? { noPrerequisiteSelected: true } : null;
     }
 
+    // check positive Price validation
+    static checkPrice(control: AbstractControl): ValidationErrors | null {
+        if (control && control.value) {
+            const value = control.value;
+            if (/[^0-9]/.test(value[value.length - 1]) || value === '0.0' || value === '0.000') {
+                return { invalidPrice: true };
+            }
+        }
+        return null;
+    }
 }

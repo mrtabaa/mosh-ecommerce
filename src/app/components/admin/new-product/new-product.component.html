@@ -10,7 +10,7 @@
                 </p>
                 <!-- New Category -->
                 <p *ngIf="AddedCategory.value" class="newItemAdded">
-                    {{AddedCategory.value | titlecase}} added to the {{Type.value | titlecase}} Type's category.
+                    {{AddedCategory.value | titlecase}} Category added to the Type {{Type.value | titlecase}}.
                 </p>
             </div>
             <!-- #endregion -->
@@ -46,29 +46,34 @@
                 <!-- #region newType -->
                 <mat-form-field class="newTypeCategoryInput" *ngIf="Type.value === 'newType'" fxLayout="column"
                     fxLayoutAlign="start stretch">
-                    <input formControlName="newType" [required]="true" matInput (keydown.enter)="addType();"
+                    <input formControlName="newType" [required]="true" appRemoveDoubleSpace (keydown.enter)="addType();"
                         placeholder="New Type" [cdkTrapFocusAutoCapture]="Type.value === 'newType'"
-                        [cdkTrapFocus]="Type.value === 'newType'" fxFlex="100" />
+                        [cdkTrapFocus]="Type.value === 'newType'" matInput fxFlex="100" />
                     <!-- #region buttons -->
-                    <button type="button" mat-mini-fab (click)="addType()"
-                        [disabled]="!NewType.hasError('newItemNotAdded') || NewType.hasError('uniqueType')"
+                    <button type="button" mat-mini-fab (click)="addType()" [disabled]="NewType.invalid"
                         color="primary">Add
                     </button>
-                    <button type="button" mat-mini-fab (click)="Type.setValue(null)" color="accent">
+                    <button type="button" mat-mini-fab (click)="Type.setValue(null)" (click)="Category.setValue(null)"
+                        color="accent">
                         X
                     </button>
                     <!-- #endregion -->
                     <!-- #region errors -->
                     <mat-error *ngIf="NewType.hasError('required')">
-                        Enter a value Or cancel.
+                        Enter New Type name Or cancel. (min: 2 characters)
                     </mat-error>
+                    <mat-hint *ngIf="NewType.hasError('minlength')">
+                        Minimum of 2 characters.
+                    </mat-hint>
                     <mat-error *ngIf="NewType.hasError('uniqueType')">
                         Type {{NewType.value | titlecase}} already exists.
                     </mat-error>
-                    <mat-error *ngIf="NewType.hasError('newItemNotAdded') && !NewType.hasError('uniqueType')"
-                        class="addWarning">
-                        Hit <b>Enter</b>/<b>Add</b> for New Type or <b>X</b> to Cancel.
+                    <mat-error *ngIf="NewType.hasError('pattern')">
+                        Only alphabet, numbers and dash(-) are allowed.
                     </mat-error>
+                    <mat-hint *ngIf="NewType.valid" class="addWarning">
+                        Hit <b>Enter</b>/<b>Add</b> or <b>X</b> to Cancel.
+                    </mat-hint>
                     <!-- #endregion -->
                 </mat-form-field>
                 <!-- #endregion -->
@@ -118,26 +123,29 @@
                         [cdkTrapFocusAutoCapture]="Category.value === 'newCategory'"
                         [cdkTrapFocus]="Category.value === 'newCategory'" matInput fxFlex="100" />
                     <!-- #region buttons -->
-                    <button type="button" mat-mini-fab (click)="addCategory()"
-                        [disabled]="!NewCategory.hasError('newItemNotAdded') || NewCategoryGroup.hasError('uniqueCategory')"
+                    <button type="button" [disabled]="NewCategoryGroup.invalid" (click)="addCategory()" mat-mini-fab
                         color="primary">
                         Add
                     </button>
-                    <button type="button" mat-mini-fab (click)="Category.setValue(null)" color="accent">
+                    <button type="button" mat-mini-fab color="accent">
                         X
                     </button>
                     <!-- #endregion -->
                     <!-- #region errors -->
                     <mat-error *ngIf="NewCategory.hasError('required')">
-                        Enter a value Or cancel.
+                        Enter New Category name Or cancel. (min: 2 characters)
                     </mat-error>
+                    <mat-hint *ngIf="NewCategory.hasError('minlength')">
+                        Minimum of 2 characters.
+                    </mat-hint>
                     <mat-error *ngIf="NewCategoryGroup.hasError('uniqueCategory')">
                         {{NewCategory.value | uppercase}} already exists in Type {{Type.value | titlecase}}.
                     </mat-error>
-                    <mat-error
-                        *ngIf="NewCategory.hasError('newItemNotAdded') && !NewCategoryGroup.hasError('uniqueCategory')"
-                        class="addWarning">
-                        Hit <b>Enter</b>/<b>Add</b> for New Category or <b>X</b> to Cancel.
+                    <mat-error *ngIf="NewCategory.hasError('pattern')">
+                        Only alphabet, numbers and dash(-) are allowed.
+                    </mat-error>
+                    <mat-error *ngIf="NewCategory.valid" class="addWarning">
+                        Hit <b>Enter</b>/<b>Add</b> or <b>X</b> to Cancel.
                     </mat-error>
                     <!-- #endregion -->
                 </mat-form-field>
@@ -155,7 +163,8 @@
                     <mat-form-field fxFlex="95">
                         <input formControlName="title" [required]="true" appRemoveDoubleSpace matInput
                             placeholder="Title">
-                        <mat-error *ngIf="Title.hasError('required')">Title field is required.</mat-error>
+                        <mat-error *ngIf="Title.invalid">Title field is
+                            required.</mat-error>
                     </mat-form-field>
                     <mat-icon *ngIf="Title.valid" color="primary">
                         check_circle
@@ -168,8 +177,12 @@
                         <input formControlName="price" [required]="true" [maxLength]="9" appPriceUsd matInput
                             placeholder="Price">
                         <span matPrefix>$&nbsp;</span>
-                        <mat-error *ngIf="Price.hasError('required')">Price field is required.</mat-error>
-                        <mat-error *ngIf="Price.hasError('invalidPrice')">Enter a valid price. e.g 5.99</mat-error>
+                        <mat-error *ngIf="Price.hasError('required')">
+                            Price field is required with a positive value.
+                        </mat-error>
+                        <mat-error *ngIf="Price.hasError('invalidPrice')">
+                            Enter a valid price. e.g 5.99
+                        </mat-error>
                     </mat-form-field>
                     <mat-icon *ngIf="Price.valid" color="primary">
                         check_circle

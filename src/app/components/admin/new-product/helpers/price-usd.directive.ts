@@ -47,7 +47,6 @@ export class PriceUsdDirective {
   }
 
   applyDecimalPipe(value: string): string {
-    console.log(value);
     return value === '' || value === '.'
       ? '0.00'
       : this.decimalPipe.transform(value, '1.2-2');

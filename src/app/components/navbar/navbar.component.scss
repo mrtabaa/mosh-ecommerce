@@ -1,3 +1,5 @@
+$buttonHoverColor: rgb(228, 227, 227);
+
 .brand a{
     text-decoration: none;
     color: white;
@@ -7,4 +9,30 @@
 }
 .gt-tablet-btns{
     margin-right: 20px;
+}
+
+#userInfo{
+    .email { 
+        color: rgb(136, 136, 136); 
+        padding: 0 1em;
+    }
+}
+
+#matList{
+    mat-list{
+        padding: 0;
+    }
+    mat-list-item:hover{
+        background-color: $buttonHoverColor;
+        cursor: pointer;
+    }
+    mat-icon{
+        margin-right: 5px;
+    }
+}
+
+#logout{
+    button:hover{
+        background-color: $buttonHoverColor;
+    }
 }

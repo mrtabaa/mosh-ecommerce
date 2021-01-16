@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { AngularFireAuth } from '@angular/fire/auth';
 import { AngularFireDatabase } from '@angular/fire/database';
 import { Observable, of as observableOf } from 'rxjs';
-import { map, switchMap } from 'rxjs/operators';
+import { map, switchMap, take } from 'rxjs/operators';
 import { User } from '../models/user.model';
 
 @Injectable({
@@ -14,9 +14,9 @@ export class UserService {
 
   authState$: Observable<firebase.default.User> = this.afAuth.authState;
 
-  displayName$: Observable<string> = this.authState$.pipe(
-    map(user => {
-      return !user ? null : user.displayName;
+  user$: Observable<User> = this.authState$.pipe(
+    switchMap(user => {
+      return !user ? null : this.db.object<User>('/users/' + user.uid).valueChanges();
     })
   );
 

@@ -85,6 +85,8 @@ export class NewProductComponent implements OnInit {
       this.AddedCategory.setValue(null);
       this.categories = this.typeCategoryService.getCategory(selectedType.value);
       this.CategoriesCtrl.setValue(this.categories); // for validation
+      this.AddedType.reset();
+      this.AddedCategory.reset();
     }
   }
 

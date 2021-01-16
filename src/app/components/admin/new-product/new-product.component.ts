@@ -97,8 +97,11 @@ export class NewProductComponent implements OnInit {
       this.typeCategoryService.addType(newItem); // add Type if it doesn't exist
       this.AddedType.setValue(newItem);
       this.Type.setValue(newItem);
-      this.NewType.setValue('');
-      this.NewType.markAsPristine();
+      this.NewType.reset();
+      // this.NewType.setValue('');
+      // this.NewType.markAsPristine();
+      this.AddedCategory.reset();
+      this.Category.reset();
       this.categories = [];
     }
   }

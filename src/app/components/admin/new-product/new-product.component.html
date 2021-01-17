@@ -20,8 +20,9 @@
                 <!-- #region options -->
                 <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="3px">
                     <mat-form-field *ngIf="Type.value !== 'newType'" fxFlex="95">
-                        <mat-select formControlName="type" [required]="true" (selectionChange)="getCategories($event)"
-                            placeholder="Type" fxLayout="column" fxLayoutAlign="center center">
+                        <mat-select formControlName="type" [(value)]="selected" [required]="true"
+                            [compareWith]="compareFn" (selectionChange)="getCategories($event)" placeholder="Type"
+                            fxLayout="column" fxLayoutAlign="center center">
                             <!-- newType option -->
                             <mat-option class="newItemButton">
                                 <button (click)="Type.setValue('newType')" mat-button fxFlex>
@@ -85,9 +86,9 @@
                 <!-- #region options -->
                 <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="3px">
                     <mat-form-field *ngIf="Category.value !== 'newCategory'" fxFlex="95">
-                        <mat-select formControlName="category" [required]="true" placeholder="Category"
-                            (click)="Category.markAsTouched();" [errorStateMatcher]="clickErrorMatcher"
-                            fxLayout="column" fxLayoutAlign="center center">
+                        <mat-select formControlName="category" [required]="true" [compareWith]="compareFn"
+                            placeholder="Category" (click)="Category.markAsTouched();"
+                            [errorStateMatcher]="clickErrorMatcher" fxLayout="column" fxLayoutAlign="center center">
                             <!-- newCategory option -->
                             <mat-option *ngIf="Type.valid" class="newItemButton">
                                 <button type="button" (click)="Category.setValue('newCategory')" mat-button fxFlex>
@@ -221,4 +222,4 @@
     </div>
 </form>
 
-<!-- <p>{{ form.value | json }}</p> -->
+<p>{{ form.value | json }}</p>

@@ -22,6 +22,7 @@ export class NewProductComponent implements OnInit {
 
   types: string[];
   categories: string[];
+  selected: string;
 
   isSubmitFail: boolean;
   //#endregion
@@ -82,6 +83,7 @@ export class NewProductComponent implements OnInit {
   }
 
   getCategories(selectedType: MatSelectChange): void {
+    console.log(selectedType.source);
     if (selectedType.value) {
       this.Category.setValue(null);
       this.AddedCategory.setValue(null);
@@ -95,6 +97,7 @@ export class NewProductComponent implements OnInit {
 
   addType(): void {
     const newItem = this.NewType.value.trim();
+    console.log(this.selected);
 
     if (this.NewType.valid) {
       this.typeCategoryService.addType(newItem);
@@ -127,9 +130,13 @@ export class NewProductComponent implements OnInit {
     }
   }
 
+  compareFn(x: string, y: string): boolean {
+    return x && y ? x === y : x === y;
+  }
+
   onSubmit($event: Product): void {
     // double-check if all required values are entered successfully before creating a product on database.
-    if (this.Type.value && this.Category.value && this.Title.value && this.Price.value && this.ImageUrl.value) {
+    if (!this.form.hasError('invalidForm')) {
       this.isSubmitFail = null;
       this.newProductService.createProduct($event);
     }

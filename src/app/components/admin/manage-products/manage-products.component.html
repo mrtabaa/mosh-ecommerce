@@ -1,1 +1,24 @@
-<button mat-raised-button color="primary" [routerLink]="['/admin/new-product']">New Product</button>
+<div fxLayout="column" fxLayoutGap="2em">
+    <!-- #region newProduct & Search -->
+    <div fxLayout="row" fxLayoutAlign="center">
+        <div id="newProd-search" fxLayout="column" fxFlex="30" fxFlex.lt-sm="60" fxLayoutAlign="center stretch"
+            fxLayoutGap="1em" style="margin-top: 2em;">
+            <button [routerLink]="['/admin/new-product']" fxFlex mat-raised-button color="primary">
+                New Product
+            </button>
+            <mat-form-field>
+                <input type="text" placeholder="Search" matInput fxFlex>
+                <mat-hint>Search your product.</mat-hint>
+            </mat-form-field>
+        </div>
+    </div>
+    <!-- #endregion -->
+    <!-- #region table -->
+    <div fxLayout="row" fxLayoutAlign="center">
+        <div id="table" fxLayout="column" fxFlex="85" fxLayoutAlign="center stretch" style="background-color: yellow;">
+            <p fxFlex>TEST FIELD</p>
+            <p fxFlex>TEST FIELD 2</p>
+        </div>
+    </div>
+    <!-- #endregion -->
+</div>

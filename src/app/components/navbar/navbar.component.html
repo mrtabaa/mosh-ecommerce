@@ -19,9 +19,9 @@
             routerLinkActive="router-link-active">Orders</button>
     </div>
 
-    <button [matMenuTriggerFor]="appMenu" mat-button *ngIf="user$ | async as user; else login">
+    <button *ngIf="user$ | async as user; else login" [matMenuTriggerFor]="appMenu" mat-button>
         <mat-card style="display: none;"></mat-card>
-        <img mat-card-avatar src="{{user.photoUrl}}" alt="{{user.name}}'s Profile">
+        <img mat-card-avatar src="{{user.photoUrl}}">
         <mat-icon>more_vert</mat-icon>
     </button>
 

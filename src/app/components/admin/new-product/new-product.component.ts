@@ -22,7 +22,6 @@ export class NewProductComponent implements OnInit {
 
   types: string[];
   categories: string[];
-  selected: string;
 
   isSubmitFail: boolean;
   //#endregion
@@ -97,7 +96,6 @@ export class NewProductComponent implements OnInit {
 
   addType(): void {
     const newItem = this.NewType.value.trim();
-    console.log(this.selected);
 
     if (this.NewType.valid) {
       this.typeCategoryService.addType(newItem);

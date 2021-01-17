@@ -10,7 +10,7 @@ export class AuthService {
 
   constructor(private afAuth: AngularFireAuth, private userService: UserService, private router: Router) { }
 
-  async login(provider: any): Promise<void> {
+  async login(provider: firebase.default.auth.AuthProvider): Promise<void> {
     await this.afAuth.signInWithPopup(provider).then(
       credential => {
         if (credential) {

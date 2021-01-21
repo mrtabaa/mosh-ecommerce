@@ -10,4 +10,26 @@
 .gt-tablet-btns {
   margin-right: 20px;
 }
+
+#userInfo .email {
+  color: #888888;
+  padding: 0 1em;
+}
+
+#matList mat-list {
+  padding: 0;
+}
+
+#matList mat-list-item:hover {
+  background-color: #e4e3e3;
+  cursor: pointer;
+}
+
+#matList mat-icon {
+  margin-right: 5px;
+}
+
+#logout button:hover {
+  background-color: #e4e3e3;
+}
 /*# sourceMappingURL=navbar.component.css.map */

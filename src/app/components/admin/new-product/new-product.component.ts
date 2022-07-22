@@ -65,7 +65,7 @@ export class NewProductComponent implements OnInit {
         }],
         categoriesCtrl: [],
       },
-        { validators: [NewProductValidators.checkUniqueCategory] }
+        { validators: [NewProductValidators.checkUniqueCategory] } as AbstractControlOptions // fixed the deprecated by adding as
       ),
 
       addedType: [],
